@@ -22,6 +22,17 @@ pub trait Interface {
     async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error>;
 }
 
+#[cfg(feature = "async")]
+impl<I: Interface> Interface for &mut I {
+    type Error = I::Error;
+    async fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
+        I::write_read(self, register, buffer).await
+    }
+    async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+        I::write(self, register, data).await
+    }
+}
+
 #[cfg(feature = "blocking")]
 pub trait Interface {
     type Error;
@@ -29,10 +40,20 @@ pub trait Interface {
     fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error>;
 }
 
+#[cfg(feature = "blocking")]
+impl<I: Interface> Interface for &mut I {
+    type Error = I::Error;
+    fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
+        I::write_read(self, register, buffer)
+    }
+    fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+        I::write(self, register, data)
+    }
+}
+
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
     interface: I,
-    address: u8,
 }
 
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
