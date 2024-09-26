@@ -108,6 +108,14 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(25.0 + v as f32 / 256.0)
     }
 
+    /// Set the Output Data Rate
+    pub async fn set_output_data_rate(&mut self, odr: OutputDataRate) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL1, |v| {
+            v & !ODR_MASK | (odr as u8) << ODR_SHIFT
+        })
+        .await
+    }
+
     /// Set the Mode
     pub async fn set_mode(&mut self, mode: Mode) -> Result<(), I::Error> {
         self.modify_reg(Register::CTRL1, |v| {
