@@ -27,7 +27,7 @@ impl SlaveAddr {
     }
 }
 
-struct I2CInterface<I2C: I2c> {
+pub struct I2CInterface<I2C: I2c> {
     pub i2c: I2C,
     addr: u8,
 }

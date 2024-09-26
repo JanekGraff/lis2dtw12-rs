@@ -7,11 +7,7 @@ use embedded_hal::digital::OutputPin;
 
 use crate::Interface;
 
-struct SPIInterface<SPI, CS>
-where
-    SPI: SpiDevice,
-    CS: OutputPin,
-{
+pub struct SPIInterface<SPI: SpiDevice, CS: OutputPin> {
     pub spi: SPI,
     pub cs: CS,
 }
