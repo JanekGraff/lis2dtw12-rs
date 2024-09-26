@@ -21,12 +21,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Use cache
+        uses: Swatinem/rust-cache@v2
         
       - name: Install components
         run: rustup component add --toolchain stable rustfmt clippy
-
-      - name: Use cache
-        uses: actions/cache@v2
         
       - name: Format
         uses: actions-rs/cargo@v1
