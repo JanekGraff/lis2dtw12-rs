@@ -1,3 +1,4 @@
+// TODO: Enable back
 // #![deny(missing_docs)]
 // #![deny(warnings)]
 // #![forbid(unsafe_code)]
@@ -40,3 +41,6 @@ impl<I: Interface> Lis2dtw12<I> {
         Self { interface, address }
     }
 }
+
+#[cfg(test)]
+mod tests {}
