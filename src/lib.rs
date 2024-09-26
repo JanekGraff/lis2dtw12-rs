@@ -139,6 +139,35 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(())
     }
 
+    /// Reset all settings (CTRL registers to default)
+    pub async fn reset_settings(&mut self) -> Result<(), I::Error> {
+        self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
+        self.mode = Mode::default();
+        self.low_power_mode = LowPowerMode::default();
+        Ok(())
+    }
+
+    /// (Dis-)connect CS pull-up (only relevant when using SPI interface)
+    pub async fn disconnect_cs_pull_up(&mut self, disconnect: bool) -> Result<(), I::Error> {
+        if disconnect {
+            self.reg_set_bits(Register::CTRL3, CS_PU_DISC).await
+        } else {
+            self.reg_reset_bits(Register::CTRL3, CS_PU_DISC).await
+        }
+    }
+
+    /// Enable or disable block data update
+    /// When enabled, the output registers are continously updated
+    /// When disabled, the output registers are updated only after MSB and LSB reading
+    /// Enabled by default
+    pub async fn enable_continuous_update(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL3, BDU).await
+        } else {
+            self.reg_reset_bits(Register::CTRL3, BDU).await
+        }
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
