@@ -16,7 +16,7 @@ mod spi;
 
 #[cfg(all(feature = "blocking", feature = "async"))]
 compile_error!("feature \"blocking\" and feature \"async\" cannot be enabled at the same time");
-#[cfg(all(not(feature = "blocking"), not(feature = "async")))]
+#[cfg(not(any(feature = "blocking", feature = "async")))]
 compile_error!("either feature \"blocking\" or feature \"async\" must be enabled");
 
 use core::fmt::Debug;
