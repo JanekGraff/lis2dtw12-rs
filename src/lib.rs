@@ -74,6 +74,8 @@ impl<I: Interface> Interface for &mut I {
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
     interface: I,
+    mode: Mode,
+    low_power_mode: LowPowerMode,
 }
 
 /// LIS2DTW12 driver
@@ -81,7 +83,11 @@ pub struct Lis2dtw12<I> {
 impl<I: Interface> Lis2dtw12<I> {
     /// Create a new `LIS2DTW12` driver from a given interface
     pub fn new(interface: I) -> Self {
-        Self { interface }
+        Self {
+            interface,
+            mode: Mode::default(),
+            low_power_mode: LowPowerMode::default(),
+        }
     }
 
     /// Destroy the driver instance returning the interface instance
@@ -95,10 +101,21 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Read the temperature data
-    pub async fn get_temperature(&mut self) -> Result<i16, I::Error> {
+    pub async fn get_temperature(&mut self) -> Result<f32, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_T_L, &mut buffer).await?;
-        Ok((buffer[1] as i16) << 4 | (buffer[0] as i16) >> 4)
+        let v = ((buffer[1] as i16) << 8 | buffer[0] as i16);
+        Ok(25.0 + v as f32 / 256.0)
+    }
+
+    /// Set the Mode
+    pub async fn set_mode(&mut self, mode: Mode) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL1, |v| {
+            v & !MODE_MASK | (mode as u8) << MODE_SHIFT
+        })
+        .await?;
+        self.mode = mode;
+        Ok(())
     }
 
     #[inline]
@@ -143,4 +160,22 @@ impl<I: Interface> Lis2dtw12<I> {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use crate::Interface;
+
+    struct MockInterface;
+    impl Interface for MockInterface {
+        type Error = ();
+        fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+            Ok(())
+        }
+        fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn test() {
+        let mut lis2dtw12 = crate::Lis2dtw12::new(MockInterface);
+    }
+}

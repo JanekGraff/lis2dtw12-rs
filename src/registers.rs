@@ -101,3 +101,12 @@ impl Register {
         self as u8
     }
 }
+
+// ----------------- Register Masks ----------------- //
+// ------- CTRL1 ------- //
+pub const ODR_MASK: u8 = 0b1111_0000;
+pub const ODR_SHIFT: u8 = 4;
+pub const MODE_MASK: u8 = 0b0000_1100;
+pub const MODE_SHIFT: u8 = 2;
+pub const LP_MODE_MASK: u8 = 0b0000_0011;
+pub const LP_MODE_SHIFT: u8 = 0;
