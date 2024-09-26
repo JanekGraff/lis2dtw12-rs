@@ -14,6 +14,8 @@ compile_error!("feature \"blocking\" and feature \"async\" cannot be enabled at 
 #[cfg(all(not(feature = "blocking"), not(feature = "async")))]
 compile_error!("either feature \"blocking\" or feature \"async\" must be enabled");
 
+use registers::Register;
+
 #[cfg(feature = "async")]
 #[allow(async_fn_in_trait)]
 pub trait Interface {
@@ -56,10 +58,62 @@ pub struct Lis2dtw12<I> {
     interface: I,
 }
 
+/// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 impl<I: Interface> Lis2dtw12<I> {
-    pub async fn new(interface: I, address: u8) -> Self {
-        Self { interface, address }
+    /// Create a new `LIS2DTW12` driver from a given interface
+    pub fn new(interface: I) -> Self {
+        Self { interface }
+    }
+
+    /// Destroy the driver instance returning the interface instance
+    pub fn destroy(self) -> I {
+        self.interface
+    }
+
+    /// Read the WHO_AM_I register
+    pub async fn get_device_id(&mut self) -> Result<u8, I::Error> {
+        self.read_reg(Register::WHO_AM_I).await
+    }
+
+    #[inline]
+    async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
+        let mut data = [0];
+        self.interface.write_read(&[reg.addr()], &mut data).await?;
+        Ok(data[0])
+    }
+
+    #[inline]
+    async fn read_regs(&mut self, reg: Register, buffer: &mut [u8]) -> Result<(), I::Error> {
+        pub const MULTI_READ_FLAG: u8 = 0b1000_0000;
+        self.interface
+            .write_read(&[reg.addr() | MULTI_READ_FLAG], buffer)
+            .await
+    }
+
+    #[inline]
+    async fn write_reg(&mut self, reg: Register, data: u8) -> Result<(), I::Error> {
+        self.interface.write(&[reg.addr(), data]).await
+    }
+
+    #[inline]
+    async fn modify_reg<F: FnOnce(u8) -> u8>(
+        &mut self,
+        reg: Register,
+        f: F,
+    ) -> Result<(), I::Error> {
+        let r = self.read_reg(reg).await?;
+        self.write_reg(reg, f(r)).await
+    }
+
+    #[inline]
+    async fn reg_set_bits(&mut self, reg: Register, mask: u8) -> Result<(), I::Error> {
+        self.modify_reg(reg, |r| r | mask).await
+    }
+
+    #[inline]
+    async fn reg_reset_bits(&mut self, reg: Register, mask: u8) -> Result<(), I::Error> {
+        self.modify_reg(reg, |r| r & !mask).await
     }
 }
 
