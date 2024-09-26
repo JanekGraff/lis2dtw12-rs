@@ -1,7 +1,12 @@
-// TODO: Enable back
-// #![deny(missing_docs)]
-// #![deny(warnings)]
-// #![forbid(unsafe_code)]
+//! # LIS2DTW12
+//! A platform agnostic driver to interface with the LIS2DTW12 (3-axis accelerometer + temperature sensor).
+//! The driver uses the `embedded-hal` traits and supports interfaces with I2C and SPI.
+//! The driver supports async and blocking modes, selectable with the `async` and `blocking` features.
+//!
+
+#![deny(missing_docs)]
+#![deny(warnings)]
+#![forbid(unsafe_code)]
 #![allow(unused)]
 #![cfg_attr(not(test), no_std)]
 
@@ -14,13 +19,19 @@ compile_error!("feature \"blocking\" and feature \"async\" cannot be enabled at 
 #[cfg(all(not(feature = "blocking"), not(feature = "async")))]
 compile_error!("either feature \"blocking\" or feature \"async\" must be enabled");
 
+use core::fmt::Debug;
+
 use registers::Register;
 
+/// async interface
 #[cfg(feature = "async")]
 #[allow(async_fn_in_trait)]
 pub trait Interface {
-    type Error;
+    /// Error type, should use the error provided by the HAL implementation
+    type Error: Debug;
+    /// Write data to the device and read data back
     async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error>;
+    /// Write data to the device
     async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error>;
 }
 
@@ -35,10 +46,14 @@ impl<I: Interface> Interface for &mut I {
     }
 }
 
+/// Blocking interface
 #[cfg(feature = "blocking")]
 pub trait Interface {
-    type Error;
+    /// Error type, should use the error provided by the HAL implementation
+    type Error: Debug;
+    /// Write data to the device and read data back
     fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error>;
+    /// Write data to the device
     fn write(&mut self, data: &[u8]) -> Result<(), Self::Error>;
 }
 
@@ -53,6 +68,7 @@ impl<I: Interface> Interface for &mut I {
     }
 }
 
+/// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
     interface: I,
@@ -74,6 +90,13 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Read the WHO_AM_I register
     pub async fn get_device_id(&mut self) -> Result<u8, I::Error> {
         self.read_reg(Register::WHO_AM_I).await
+    }
+
+    /// Read the temperature data
+    pub async fn get_temperature(&mut self) -> Result<i16, I::Error> {
+        let mut buffer = [0; 2];
+        self.read_regs(Register::OUT_T_L, &mut buffer).await?;
+        Ok((buffer[1] as i16) << 4 | (buffer[0] as i16) >> 4)
     }
 
     #[inline]
