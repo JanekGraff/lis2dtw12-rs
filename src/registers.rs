@@ -1,5 +1,60 @@
 #![allow(non_upper_case_globals)]
 
+use core::default;
+
+/// Operating Mode
+#[derive(Debug, Copy, Clone, Default)]
+pub enum Mode {
+    /// Low power mode (12/14-bit resolution, depending on the set LowPowerMode)
+    #[default]
+    LowPower = 0b00,
+    /// High-performance mode (14 Bit resolution)
+    HighPerformance = 0b01,
+    /// Single data conversion on-demand mode (12/14-bit resolution, depending on the set LowPowerMode)
+    SingleDataConversion = 0b10,
+}
+
+/// Output Data Rate
+/// Rates are shown as: <High-performance rate> / <Low-power rate>
+#[derive(Debug, Copy, Clone, Default)]
+pub enum OutputDataRate {
+    /// Power-down mode
+    #[default]
+    PowerDown = 0b0000,
+    /// 12.5 Hz / 1.6 Hz
+    Hz1_6 = 0b0001,
+    /// 12.5 Hz / 12.5 Hz
+    Hz12_5 = 0b0010,
+    /// 25 Hz / 25 Hz
+    Hz25 = 0b0011,
+    /// 50 Hz / 50 Hz
+    Hz50 = 0b0100,
+    /// 100 Hz / 100 Hz
+    Hz100 = 0b0101,
+    /// 200 Hz / 200 Hz
+    Hz200 = 0b0110,
+    /// 400 Hz / 200 Hz
+    Hz400 = 0b0111,
+    /// 800 Hz / 200 Hz
+    Hz800 = 0b1000,
+    /// 1600 Hz / 200 Hz
+    Hz1600 = 0b1001,
+}
+
+/// Low Power Mode
+#[derive(Debug, Copy, Clone, Default)]
+pub enum LowPowerMode {
+    /// Low-power mode 1 (12-bit resolution)
+    #[default]
+    Mode1 = 0b00,
+    /// Low-power mode 2 (14-bit resolution)
+    Mode2 = 0b01,
+    /// Low-power mode 3 (14-bit resolution)
+    Mode3 = 0b10,
+    /// Low-power mode 4 (14-bit resolution)
+    Mode4 = 0b11,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]

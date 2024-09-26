@@ -21,7 +21,9 @@ compile_error!("either feature \"blocking\" or feature \"async\" must be enabled
 
 use core::fmt::Debug;
 
-use registers::Register;
+use registers::*;
+
+pub use crate::registers::{LowPowerMode, Mode, OutputDataRate};
 
 /// async interface
 #[cfg(feature = "async")]
