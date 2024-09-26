@@ -16,12 +16,12 @@ pub struct SPIInterface<SPI: SpiDevice, CS: OutputPin> {
 impl<SPI: SpiDevice, CS: OutputPin> Interface for SPIInterface<SPI, CS> {
     type Error = SPI::Error;
 
-    async fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
+    async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
         self.cs.set_low().ok();
         todo!();
     }
 
-    async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+    async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
         todo!()
     }
 }
@@ -30,12 +30,11 @@ impl<SPI: SpiDevice, CS: OutputPin> Interface for SPIInterface<SPI, CS> {
 impl<SPI: SpiDevice, CS: OutputPin> Interface for SPIInterface<SPI, CS> {
     type Error = SPI::Error;
 
-    fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        self.cs.set_low().ok();
-        self.spi.read(buffer)
+    fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+        todo!()
     }
 
-    fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+    fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
         todo!()
     }
 }

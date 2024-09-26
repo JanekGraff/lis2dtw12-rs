@@ -45,11 +45,11 @@ impl<I2C: I2c> I2CInterface<I2C> {
 impl<I2C: I2c> Interface for I2CInterface<I2C> {
     type Error = I2C::Error;
 
-    async fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        self.i2c.write_read(self.addr, &[register], buffer).await
+    async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+        self.i2c.write_read(self.addr, write, read).await
     }
 
-    async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+    async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
         self.i2c.write(self.addr, data).await
     }
 }
@@ -61,11 +61,11 @@ where
 {
     type Error = I2C::Error;
 
-    fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        self.i2c.write_read(self.addr, &[register], buffer)
+    fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+        self.i2c.write_read(self.addr, write, read)
     }
 
-    fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
+    fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
         self.i2c.write(self.addr, data)
     }
 }

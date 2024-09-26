@@ -18,36 +18,36 @@ compile_error!("either feature \"blocking\" or feature \"async\" must be enabled
 #[allow(async_fn_in_trait)]
 pub trait Interface {
     type Error;
-    async fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error>;
-    async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error>;
+    async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error>;
+    async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error>;
 }
 
 #[cfg(feature = "async")]
 impl<I: Interface> Interface for &mut I {
     type Error = I::Error;
-    async fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        I::write_read(self, register, buffer).await
+    async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+        I::write_read(self, write, read).await
     }
-    async fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
-        I::write(self, register, data).await
+    async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
+        I::write(self, data).await
     }
 }
 
 #[cfg(feature = "blocking")]
 pub trait Interface {
     type Error;
-    fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error>;
-    fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error>;
+    fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error>;
+    fn write(&mut self, data: &[u8]) -> Result<(), Self::Error>;
 }
 
 #[cfg(feature = "blocking")]
 impl<I: Interface> Interface for &mut I {
     type Error = I::Error;
-    fn write_read(&mut self, register: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        I::write_read(self, register, buffer)
+    fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
+        I::write_read(self, write, read)
     }
-    fn write(&mut self, register: u8, data: &[u8]) -> Result<(), Self::Error> {
-        I::write(self, register, data)
+    fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
+        I::write(self, data)
     }
 }
 
