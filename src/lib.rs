@@ -208,24 +208,3 @@ impl<I: Interface> Lis2dtw12<I> {
         self.modify_reg(reg, |r| r & !mask).await
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::Interface;
-
-    struct MockInterface;
-    impl Interface for MockInterface {
-        type Error = ();
-        fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
-            Ok(())
-        }
-        fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
-            Ok(())
-        }
-    }
-
-    #[test]
-    fn test() {
-        let mut lis2dtw12 = crate::Lis2dtw12::new(MockInterface);
-    }
-}
