@@ -126,6 +126,19 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(())
     }
 
+    /// Set the Low Power Mode
+    pub async fn set_low_power_mode(
+        &mut self,
+        low_power_mode: LowPowerMode,
+    ) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL1, |v| {
+            v & !LP_MODE_MASK | (low_power_mode as u8) << LP_MODE_SHIFT
+        })
+        .await?;
+        self.low_power_mode = low_power_mode;
+        Ok(())
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
