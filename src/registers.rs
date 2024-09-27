@@ -97,6 +97,22 @@ impl FullScale {
     }
 }
 
+/// Fifo Mode
+#[derive(Debug, Copy, Clone, Default)]
+pub enum FifoMode {
+    /// Bypass mode (FIFO turned off)
+    #[default]
+    Bypass = 0b000,
+    /// FIFO mode: Stop collecting data when FIFO is full
+    StopOnFifoFull = 0b001,
+    /// Continuous-to-FIFO: Stream mode until trigger is deasserted, then FIFO mode (StopOnFifoFull)
+    ContinuousToFifo = 0b011,
+    /// Bypass-to-continuous: Bypass mode until trigger is deasserted, then Continuous mode
+    BypassToContinuous = 0b100,
+    /// Continuous mode: If FIFO is full, the new sample overwrites the older sample
+    Continuous = 0b110,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
@@ -175,3 +191,9 @@ pub const SINGLE_TAP: u8 = 0b0000_1000;
 pub const D6D_IA: u8 = 0b0000_0100;
 pub const FF_IA: u8 = 0b0000_0010;
 pub const DRDY: u8 = 0b0000_0001;
+
+// ------- FIFO_CTRL ------- //
+pub const FMODE_MASK: u8 = 0b1110_0000;
+pub const FMODE_SHIFT: u8 = 5;
+pub const FTH_MASK: u8 = 0b0001_1111;
+pub const FTH_SHIFT: u8 = 0;

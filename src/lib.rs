@@ -354,6 +354,23 @@ impl<I: Interface> Lis2dtw12<I> {
         })
     }
 
+    /// Set the FIFO mode
+    pub async fn set_fifo_mode(&mut self, fifo_mode: FifoMode) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL3, |v| {
+            v & !FMODE_MASK | (fifo_mode as u8) << FMODE_SHIFT
+        })
+        .await
+    }
+
+    /// Set the FIFO threshold
+    pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
+        assert!(threshold <= 0b11111);
+        self.modify_reg(Register::FIFO_CTRL, |v| {
+            v & !FTH_MASK | threshold << FTH_SHIFT
+        })
+        .await
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
