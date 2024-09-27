@@ -1,5 +1,3 @@
-use core::default;
-
 #[cfg(feature = "blocking")]
 use embedded_hal::i2c::I2c;
 #[cfg(feature = "async")]

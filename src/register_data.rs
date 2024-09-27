@@ -152,12 +152,30 @@ impl From<u8> for FifoSamplesStatus {
 /// Wake-up source
 #[derive(Debug, Copy, Clone)]
 pub struct WakeUpSource {
-    free_fall_event: bool,
-    sleep_event: bool,
-    wake_up_event: bool,
-    x_wake_up_event: bool,
-    y_wake_up_event: bool,
-    z_wake_up_event: bool,
+    /// Free-fall event detection status
+    /// false: no free-fall event detected
+    /// true: free-fall event detected
+    pub free_fall_event: bool,
+    /// Sleep event status
+    /// false: no sleep event detected
+    /// true: sleep event detected
+    pub sleep_event: bool,
+    /// Wake up event detection
+    /// false: no wake-up event detected
+    /// true: wake-up event detected
+    pub wake_up_event: bool,
+    /// X-axis wake-up event detection
+    /// false: no wake-up event detected
+    /// true: wake-up event on X-axis detected
+    pub x_wake_up_event: bool,
+    /// Y-axis wake-up event detection
+    /// false: no wake-up event detected
+    /// true: wake-up event on Y-axis detected
+    pub y_wake_up_event: bool,
+    /// Z-axis wake-up event detection
+    /// false: no wake-up event detected
+    /// true: wake-up event on Z-axis detected
+    pub z_wake_up_event: bool,
 }
 
 impl From<u8> for WakeUpSource {

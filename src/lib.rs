@@ -7,7 +7,6 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 #![forbid(unsafe_code)]
-#![allow(unused)]
 #![cfg_attr(not(test), no_std)]
 
 mod i2c;
@@ -73,7 +72,7 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_temperature(&mut self) -> Result<f32, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_T_L, &mut buffer).await?;
-        let v = ((buffer[1] as i16) << 8 | buffer[0] as i16);
+        let v = (buffer[1] as i16) << 8 | buffer[0] as i16;
         Ok(25.0 + v as f32 / 256.0)
     }
 
@@ -289,10 +288,8 @@ impl<I: Interface> Lis2dtw12<I> {
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
-        self.modify_reg(Register::FIFO_CTRL, |v| {
-            v & !FTH_MASK | threshold << FTH_SHIFT
-        })
-        .await
+        self.modify_reg(Register::FIFO_CTRL, |v| v & !FTH_MASK | t << FTH_SHIFT)
+            .await
     }
 
     /// Get the FIFO samples status
