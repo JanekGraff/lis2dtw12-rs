@@ -257,3 +257,11 @@ pub const TAP_PRIOR_SHIFT: u8 = 5;
 // ------- TAP_THS_Z ------- //
 pub const TAP_XYZ_MASK: u8 = 0b1110_0000;
 pub const TAP_XYZ_SHIFT: u8 = 5;
+
+// ------- INT_DUR ------- //
+pub const LATENCY_MASK: u8 = 0b1111_0000;
+pub const LATENCY_SHIFT: u8 = 4;
+pub const QUIET_MASK: u8 = 0b0000_1100;
+pub const QUIET_SHIFT: u8 = 2;
+pub const SHOCK_MASK: u8 = 0b0000_0011;
+pub const SHOCK_SHIFT: u8 = 0;

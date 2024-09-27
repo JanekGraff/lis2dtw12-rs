@@ -492,6 +492,57 @@ impl<I: Interface> Lis2dtw12<I> {
         .await
     }
 
+    /// Duration of maximum time gap for double-tap recognition. When double-tap recognition is enabled, this
+    /// register expresses the maximum time between two successive detected taps to determine a double-tap event.
+    ///
+    /// Default value is LATENCY[3:0] = 0000 (which is 16 * 1/ODR)
+    ///
+    /// 1 LSB = 32 * 1/ODR
+    ///
+    /// # NOTE
+    ///
+    /// Latency is a 4-bit value (0-15)
+    /// If the given latency value is greater than 15, it will be set to 15
+    pub async fn set_double_tap_latency(&mut self, latency: u8) -> Result<(), I::Error> {
+        let l = latency.clamp(0, 15);
+        self.modify_reg(Register::INT_DUR, |v| {
+            v & !LATENCY_MASK | l << LATENCY_SHIFT
+        })
+        .await
+    }
+
+    /// Expected quiet time after a tap detection: this register represents the time after the first detected tap in which
+    /// there must not be any overthreshold event.
+    ///
+    /// Default value is QUIET[1:0] = 00 (which is 2 * 1/ODR)
+    ///
+    /// 1 LSB = 4 * 1/ODR
+    ///
+    /// # NOTE
+    ///
+    /// Quiet time is a 2-bit value (0-3)
+    /// If the given quiet time value is greater than 3, it will be set to 3
+    pub async fn set_tap_quiet_time(&mut self, quiet_time: u8) -> Result<(), I::Error> {
+        let q = quiet_time.clamp(0, 3);
+        self.modify_reg(Register::INT_DUR, |v| v & !QUIET_MASK | q << QUIET_SHIFT)
+            .await
+    }
+
+    /// Maximum duration of overthreshold event: this register represents the maximum time of an overthreshold
+    /// signal detection to be recognized as a tap event.
+    /// Default value is SHOCK[1:0] = 00 (which is 4 * 1/ODR)
+    /// 1 LSB = 8 *1/ODR
+    ///
+    /// # NOTE
+    ///
+    /// Shock time is a 2-bit value (0-3)
+    /// If the given shock time value is greater than 3, it will be set to 3
+    pub async fn set_tap_shock_time(&mut self, shock_time: u8) -> Result<(), I::Error> {
+        let s = shock_time.clamp(0, 3);
+        self.modify_reg(Register::INT_DUR, |v| v & !SHOCK_MASK | s << SHOCK_SHIFT)
+            .await
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
