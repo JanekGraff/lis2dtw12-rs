@@ -35,11 +35,13 @@ impl<SPI: SpiDevice, CS: OutputPin> SPIInterface<SPI, CS> {
 impl<SPI: SpiDevice, CS: OutputPin> Interface for SPIInterface<SPI, CS> {
     type Error = SPI::Error;
 
+    #[allow(unused_variables)]
     async fn write_read(&mut self, write: &[u8], read: &mut [u8]) -> Result<(), Self::Error> {
         self.cs.set_low().ok();
         todo!();
     }
 
+    #[allow(unused_variables)]
     async fn write(&mut self, data: &[u8]) -> Result<(), Self::Error> {
         todo!()
     }
