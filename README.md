@@ -15,6 +15,16 @@ The driver supports async and blocking modes, selectable with the `async` and `b
 - [LIS2DH12 product page][product-page]
 - [LIS2DH12 datasheet][datasheet]
 
+## NOTE
+
+This crate is still a WIP and at this point, it is just a theoretical implementation of the datasheet as my sensor has not arrived yet.
+
+## Contributing
+
+If you have any problems feel free to open an issue, if i find the time i might review and fix it.
+
+Also feel free to open PRs if you miss some features or find bugs. PRs for documentation, tests, examples, etc. are also very welcome!
+
 ## License
 
 Dual licensed under your choice of either of:
