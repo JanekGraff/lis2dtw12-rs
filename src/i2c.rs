@@ -26,9 +26,11 @@ impl SlaveAddr {
 }
 
 /// I2C interface for the driver
+///
 /// This is a wrapper struct around an `embedded_hal::i2c::I2c` device.
-/// By using this wrapper struct, the driver can be used with any I2C device that implements the `embedded_hal` traits
-/// It also allows us to easily support both I2C and SPI interfaces in the driver
+///
+/// Using this wrapper struct instead of just an `embedded_hal::i2c::I2c` we can easily support both
+/// I2C and SPI devices in the same driver.
 pub struct I2CInterface<I2C: I2c> {
     /// I2C device
     i2c: I2C,

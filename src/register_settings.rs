@@ -11,6 +11,7 @@ pub enum Mode {
 }
 
 /// Output Data Rate
+///
 /// Rates are shown as: <High-performance rate> / <Low-power rate>
 #[derive(Debug, Copy, Clone, Default)]
 pub enum OutputDataRate {
@@ -135,6 +136,7 @@ pub enum Threshold6D {
 }
 
 /// Tap Priority axis selection for tap detection
+///
 /// MAX_PRIO, MID_PRIO, MIN_PRIO
 #[derive(Debug, Copy, Clone, Default)]
 pub enum TapPriority {

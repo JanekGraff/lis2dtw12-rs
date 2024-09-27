@@ -8,9 +8,11 @@ use embedded_hal::digital::OutputPin;
 use crate::Interface;
 
 /// SPI interface for the driver
+///
 /// This is a wrapper struct around an `embedded_hal::spi::SpiDevice` and an `embedded_hal::digital::OutputPin` (for CS)
-/// By using this wrapper struct, the driver can be used with any SPI device and any OutputPin that implements the `embedded_hal` traits
-/// It also allows us to easily support both I2C and SPI interfaces in the driver
+///
+/// Using this wrapper struct instead of just an `embedded_hal::i2c::SpiDevice` we can easily support both
+/// I2C and SPI devices in the same driver.
 #[allow(unused)]
 pub struct SPIInterface<SPI: SpiDevice, CS: OutputPin> {
     /// SPI device

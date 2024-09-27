@@ -13,4 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Fix formatting of docstrings
+
 [Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.0...HEAD

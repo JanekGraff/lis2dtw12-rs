@@ -125,8 +125,11 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable or disable block data update
+    ///
     /// When enabled, the output registers are continously updated
+    ///
     /// When disabled, the output registers are updated only after MSB and LSB reading
+    ///
     /// Enabled by default
     pub async fn enable_continuous_update(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -155,8 +158,11 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable/Disable Filtered data type selection
+    ///
     /// disabled: low-pass filter path selected
+    ///
     /// enabled: high-pass filter path selected
+    ///
     /// Disabled by default
     pub async fn enable_filtered_data_selection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -182,10 +188,14 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// Status and Event Status registers are mostly the same with the exceptions:
     /// - Status register reports the status of the FIFO threshold
+    ///
     ///     **INSTEAD**
+    ///
     ///     Event Status register reports the status of the FIFO overrun
     /// - Status register reports the wake-up event detection status
+    ///
     ///    **INSTEAD**
+    ///
     ///   Event Status register reports the temperature data ready status
     ///   
     /// The rest is the same
@@ -200,10 +210,14 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// Status and Event Status registers are mostly the same with the exceptions:
     /// - Status register reports the status of the FIFO threshold
+    ///
     ///     **INSTEAD**
+    ///
     ///     Event Status register reports the status of the FIFO overrun
     /// - Status register reports the wake-up event detection status
+    ///
     ///    **INSTEAD**
+    ///
     ///   Event Status register reports the temperature data ready status
     ///
     /// The rest is the same
@@ -328,7 +342,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Fifo threshold is a 5-bit value (0-31)
+    /// Fifo threshold is a 5-bit value (0-31).
+    ///
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
@@ -343,6 +358,7 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable 4D decection portrait/landscape position
+    ///
     /// Disabled by default
     pub async fn enable_4d_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -353,6 +369,7 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Set the 6D threshold
+    ///
     /// Thresholds for 4D/6D function @ FS = ±2g
     pub async fn set_6d_threshold(&mut self, threshold: Threshold6D) -> Result<(), I::Error> {
         self.modify_reg(Register::TAP_THS_X, |v| {
@@ -362,6 +379,7 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Set the tap priority
+    ///
     /// Tap Priority axis selection for tap detection
     pub async fn set_tap_priority(&mut self, tap_priority: TapPriority) -> Result<(), I::Error> {
         self.modify_reg(Register::TAP_THS_Y, |v| {
@@ -390,7 +408,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Threshold is a 5-bit value (0-31)
+    /// Threshold is a 5-bit value (0-31).
+    ///
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_x_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
@@ -404,7 +423,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Threshold is a 5-bit value (0-31)
+    /// Threshold is a 5-bit value (0-31).
+    ///
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_y_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
@@ -418,7 +438,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Threshold is a 5-bit value (0-31)
+    /// Threshold is a 5-bit value (0-31).
+    ///
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_z_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
@@ -437,7 +458,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Latency is a 4-bit value (0-15)
+    /// Latency is a 4-bit value (0-15).
+    ///
     /// If the given latency value is greater than 15, it will be set to 15
     pub async fn set_double_tap_latency(&mut self, latency: u8) -> Result<(), I::Error> {
         let l = latency.clamp(0, 15);
@@ -456,7 +478,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Quiet time is a 2-bit value (0-3)
+    /// Quiet time is a 2-bit value (0-3).
+    ///
     /// If the given quiet time value is greater than 3, it will be set to 3
     pub async fn set_tap_quiet_time(&mut self, quiet_time: u8) -> Result<(), I::Error> {
         let q = quiet_time.clamp(0, 3);
@@ -466,12 +489,14 @@ impl<I: Interface> Lis2dtw12<I> {
 
     /// Maximum duration of overthreshold event: this register represents the maximum time of an overthreshold
     /// signal detection to be recognized as a tap event.
+    ///
     /// Default value is SHOCK[1:0] = 00 (which is 4 * 1/ODR)
     /// 1 LSB = 8 *1/ODR
     ///
     /// # NOTE
     ///
-    /// Shock time is a 2-bit value (0-3)
+    /// Shock time is a 2-bit value (0-3).
+    ///
     /// If the given shock time value is greater than 3, it will be set to 3
     pub async fn set_tap_shock_time(&mut self, shock_time: u8) -> Result<(), I::Error> {
         let s = shock_time.clamp(0, 3);
@@ -480,8 +505,11 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable/Disable double-tap detection
+    ///
     /// enabled: Single and double tap detection enabled
+    ///
     /// disabled: Only single tap detection enabled
+    ///
     /// Disabled by default
     pub async fn enable_double_tap_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -494,8 +522,11 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable/Disable sleep mode
+    ///
     /// enabled: Sleep mode enabled
+    ///
     /// disabled: Sleep mode disabled
+    ///
     /// Disabled by default
     pub async fn enable_sleep_mode(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -506,12 +537,15 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Set the wake-up threshold
+    ///
     /// Wake-up threshold, 6-bit unsigned 1 LSB = 1/64 of FS.
+    ///
     /// Default value: 000000
     ///
     /// # NOTE
     ///
-    /// Threshold is a 6-bit value (0-63)
+    /// Threshold is a 6-bit value (0-63).
+    ///
     /// If the given threshold value is greater than 63, it will be set to 63
     pub async fn set_wake_up_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 63);
@@ -527,7 +561,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Duration is a 2-bit value (0-3)
+    /// Duration is a 2-bit value (0-3).
+    ///
     /// If the given duration value is greater than 3, it will be set to 3
     pub async fn set_wake_up_duration(&mut self, duration: u8) -> Result<(), I::Error> {
         let d = duration.clamp(0, 3);
@@ -539,8 +574,11 @@ impl<I: Interface> Lis2dtw12<I> {
 
     /// Enable/Disable stationary detection / motion detection with no automatic ODR change
     /// when detecting stationary state
+    ///
     /// enabled: Stationary detection enabled
+    ///
     /// disabled: Stationary detection disabled
+    ///
     /// Disabled by default
     pub async fn enable_stationary_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
@@ -553,11 +591,13 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set duration to go i nsleep mode
     ///
     /// Default value is SLEEP_ DUR[3:0] = 0000 (which is 16 * 1/ODR).
+    ///
     /// 1 LSB = 512 * 1/ODR
     ///
     /// # NOTE
     ///
-    /// Duration is a 4-bit value (0-15)
+    /// Duration is a 4-bit value (0-15).
+    ///
     /// If the given duration value is greater than 15, it will be set to 15
     pub async fn set_sleep_duration(&mut self, duration: u8) -> Result<(), I::Error> {
         let d = duration.clamp(0, 15);
@@ -575,7 +615,8 @@ impl<I: Interface> Lis2dtw12<I> {
     ///
     /// # NOTE
     ///
-    /// Duration is a 6-bit value (0-63)
+    /// Duration is a 6-bit value (0-63).
+    ///
     /// If the given duration value is greater than 63, it will be set to 63
     pub async fn set_free_fall_duration(&mut self, duration: u8) -> Result<(), I::Error> {
         let d = duration.clamp(0, 63);
@@ -591,6 +632,7 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Set the free-fall threshold
+    ///
     /// Free-fall threshold @ FS = ±2 g
     pub async fn set_free_fall_threshold(
         &mut self,
@@ -775,7 +817,9 @@ impl<I: Interface> Lis2dtw12<I> {
     /// # ARGUMENTS
     ///
     /// - `enable`: Enable low-pass filter
+    ///
     ///     true: LPF2 output data sent to 6D interrupt function
+    ///
     ///     false: OD2/2 low-pass filtered data sent to 6D interrupt function
     ///     
     /// Disabled by default
