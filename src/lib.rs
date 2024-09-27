@@ -71,6 +71,7 @@ impl<I: Interface> Interface for &mut I {
 }
 
 /// Struct representation of the Status register
+#[derive(Debug, Copy, Clone)]
 pub struct Status {
     /// FIFO threshold status
     /// false: FIFO filling is lower than the threshold level
@@ -109,14 +110,14 @@ pub struct Status {
 impl From<u8> for Status {
     fn from(value: u8) -> Self {
         Self {
-            fifo_threshold: value & 0b1000_0000 != 0,
-            wake_up_event: value & 0b0100_0000 != 0,
-            sleep_event: value & 0b0010_0000 != 0,
-            double_tap_event: value & 0b0001_0000 != 0,
-            single_tap_event: value & 0b0000_1000 != 0,
-            position_change_event: value & 0b0000_0100 != 0,
-            free_fall_event: value & 0b0000_0010 != 0,
-            data_ready: value & 0b0000_0001 != 0,
+            fifo_threshold: value & FIFO_THS != 0,
+            wake_up_event: value & WU_IA != 0,
+            sleep_event: value & SLEEP_STATE != 0,
+            double_tap_event: value & DOUBLE_TAP != 0,
+            single_tap_event: value & SINGLE_TAP != 0,
+            position_change_event: value & D6D_IA != 0,
+            free_fall_event: value & FF_IA != 0,
+            data_ready: value & DRDY != 0,
         }
     }
 }
