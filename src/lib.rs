@@ -125,6 +125,58 @@ impl From<u8> for Status {
     }
 }
 
+/// Struct representation of the Status DUP (Event status) register
+#[derive(Debug, Copy, Clone)]
+pub struct EventStatus {
+    /// FIFO threshold status
+    /// false: FIFO is not completely filled
+    /// true: FIFO is overrun
+    pub fifo_overrun: bool,
+    /// Temperature data ready status
+    /// false: data not available
+    /// true: new set of data is available
+    pub temperature_data_ready: bool,
+    /// Sleep event status
+    /// false: no sleep event detected
+    /// true: sleep event detected
+    pub sleep_event: bool,
+    /// Double-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub double_tap_event: bool,
+    /// Single-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub single_tap_event: bool,
+    /// Source of change in position (portrait/landscape/face-up/face-down)
+    /// false: no change in position detected
+    /// true: change in position detected
+    pub position_change_event: bool,
+    /// Free-fall event detection status
+    /// false: no free-fall event detected
+    /// true: free-fall event detected
+    pub free_fall_event: bool,
+    /// Data ready status
+    /// false: no data is available
+    /// true: X-, Y- and Z-axis new data available
+    pub data_ready: bool,
+}
+
+impl From<u8> for EventStatus {
+    fn from(value: u8) -> Self {
+        Self {
+            fifo_overrun: value & OVR != 0,
+            temperature_data_ready: value & DRDY_T != 0,
+            sleep_event: value & SLEEP_STATE_IA != 0,
+            double_tap_event: value & DOUBLE_TAP != 0,
+            single_tap_event: value & SINGLE_TAP != 0,
+            position_change_event: value & D6D_IA != 0,
+            free_fall_event: value & FF_IA != 0,
+            data_ready: value & DRDY != 0,
+        }
+    }
+}
+
 /// Acceleration data
 pub struct AccelerationData {
     /// X-axis acceleration
@@ -318,9 +370,39 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the status of the device
+    ///
+    /// # NOTE
+    ///
+    /// Status and Event Status registers are mostly the same with the exceptions:
+    /// - Status register reports the status of the FIFO threshold
+    ///     **INSTEAD**
+    ///     Event Status register reports the status of the FIFO overrun
+    /// - Status register reports the wake-up event detection status
+    ///    **INSTEAD**
+    ///   Event Status register reports the temperature data ready status
+    ///   
+    /// The rest is the same
     pub async fn get_status(&mut self) -> Result<Status, I::Error> {
         let status = self.read_reg(Register::STATUS).await?;
         Ok(Status::from(status))
+    }
+
+    /// Get the Event Status register
+    ///
+    /// # NOTE
+    ///
+    /// Status and Event Status registers are mostly the same with the exceptions:
+    /// - Status register reports the status of the FIFO threshold
+    ///     **INSTEAD**
+    ///     Event Status register reports the status of the FIFO overrun
+    /// - Status register reports the wake-up event detection status
+    ///    **INSTEAD**
+    ///   Event Status register reports the temperature data ready status
+    ///
+    /// The rest is the same
+    pub async fn get_event_status(&mut self) -> Result<EventStatus, I::Error> {
+        let status = self.read_reg(Register::STATUS_DUP).await?;
+        Ok(EventStatus::from(status))
     }
 
     /// Get the X-axis RAW acceleration data

@@ -307,3 +307,9 @@ pub const FF_DUR_MASK: u8 = 0b1111_1000;
 pub const FF_DUR_SHIFT: u8 = 3;
 pub const FF_THS_MASK: u8 = 0b0000_0111;
 pub const FF_THS_SHIFT: u8 = 0;
+
+// ------- STATUS_DUP ------- //
+pub const OVR: u8 = 0b1000_0000;
+pub const DRDY_T: u8 = 0b0100_0000;
+pub const SLEEP_STATE_IA: u8 = 0b0010_0000;
+// remaining bits are the same as STATUS
