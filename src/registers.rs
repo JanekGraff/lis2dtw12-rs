@@ -174,3 +174,13 @@ pub const ALL_INT_DOUBLE_TAP: u8 = 0b0000_1000;
 pub const ALL_INT_SINGLE_TAP: u8 = 0b0000_0100;
 pub const ALL_INT_WU_IA: u8 = 0b0000_0010;
 pub const ALL_INT_FF_IA: u8 = 0b0000_0001;
+
+// ------- CTRL7 ------- //
+pub const DRDY_PULSED: u8 = 0b1000_0000;
+pub const INT2_ON_INT1: u8 = 0b0100_0000;
+pub const INTERRUPTS_ENABLE: u8 = 0b0010_0000;
+pub const USR_OFF_ON_OUT: u8 = 0b0001_0000;
+pub const USR_OFF_ON_WU: u8 = 0b0000_1000;
+pub const USR_OFF_W: u8 = 0b0000_0100;
+pub const HP_REF_MODE: u8 = 0b0000_0010;
+pub const LPASS_ON6D: u8 = 0b0000_0001;

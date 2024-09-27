@@ -613,6 +613,139 @@ impl<I: Interface> Lis2dtw12<I> {
         self.write_reg(Register::Z_OFS_USR, offset as u8).await
     }
 
+    /// Switch between latched and pulsed mode for data ready interrupt
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable pulsed interrupt mode (true: enabled - pulsed mode, false: disabled - latched mode)
+    ///
+    /// Disabled by default
+    pub async fn set_pulsed_interrupt_mode(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, DRDY_PULSED).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, DRDY_PULSED).await
+        }
+    }
+
+    /// Route interrupts from INT2 pad to INT1
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enabled`: Enable routing (true: enabled - All signals available only on INT2 are routed to INT1, false: disabled)
+    ///
+    /// Disabled by default
+    pub async fn route_int2_to_int1(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, INT2_ON_INT1).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, INT2_ON_INT1).await
+        }
+    }
+
+    /// Enable/Disable interrupts
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable interrupts (true: enabled, false: disabled)
+    ///
+    /// Disabled by default
+    pub async fn enable_interrupts(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, INTERRUPTS_ENABLE).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, INTERRUPTS_ENABLE)
+                .await
+        }
+    }
+
+    /// Enable/Disable application of user offset values in accelerometer output data registers
+    ///
+    /// # NOTE
+    ///
+    /// `enable_filtered_data_selection` must be **DISABLED** (low-pass path selected)
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable user offset values (true: enabled, false: disabled)
+    ///
+    /// Disabled by default
+    pub async fn enable_user_offset_on_output(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, USR_OFF_ON_OUT).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, USR_OFF_ON_OUT).await
+        }
+    }
+
+    /// Enable/Disable application of user offset values to wake-up function only
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable user offset values (true: enabled, false: disabled)
+    ///
+    /// Disabled by default
+    pub async fn enable_user_offset_on_wake_up(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, USR_OFF_ON_WU).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, USR_OFF_ON_WU).await
+        }
+    }
+
+    /// Set the weight of the user offset values
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `high_weight`: true: 15.6 mg/LSB, false: 977 µg/LSB
+    ///
+    /// Default value is 977 µg/LSB (false)
+    pub async fn set_user_offset_weight(&mut self, high_weight: bool) -> Result<(), I::Error> {
+        if high_weight {
+            self.reg_set_bits(Register::CTRL7, USR_OFF_W).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, USR_OFF_W).await
+        }
+    }
+
+    /// Enable/Disable high-pass filter reference mode
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable high-pass filter reference mode (true: enabled, false: disabled)
+    ///
+    /// Disabled by default
+    pub async fn enable_high_pass_filter_reference_mode(
+        &mut self,
+        enable: bool,
+    ) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, HP_REF_MODE).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, HP_REF_MODE).await
+        }
+    }
+
+    /// Enable/Disable low-pass filter for 6D interrupt function
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `enable`: Enable low-pass filter
+    ///     true: LPF2 output data sent to 6D interrupt function
+    ///     false: OD2/2 low-pass filtered data sent to 6D interrupt function
+    ///     
+    /// Disabled by default
+    pub async fn enable_low_pass_filter_6d_interrupt(
+        &mut self,
+        enable: bool,
+    ) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL7, LPASS_ON6D).await
+        } else {
+            self.reg_reset_bits(Register::CTRL7, LPASS_ON6D).await
+        }
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
