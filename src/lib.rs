@@ -393,6 +393,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set the FIFO threshold
     ///
     /// # NOTE
+    ///
     /// Fifo threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
@@ -456,6 +457,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set the tap Threshold for X direction
     ///
     /// # NOTE
+    ///
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_x_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
@@ -469,6 +471,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set the tap Threshold for Y direction
     ///
     /// # NOTE
+    ///
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_y_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
@@ -482,6 +485,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set the tap Threshold for Z direction
     ///
     /// # NOTE
+    ///
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_z_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
