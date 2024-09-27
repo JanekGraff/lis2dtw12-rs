@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Implementation of Interface trait for embedded_hal\[_async\] v1.0 SpiDevice
+- Implementation of Interface trait for `embedded_hal[_async]` v1.0 SpiDevice
+- Implementation of Interface trait for `embedded_hal[_async]` v1.0 SpiBus
 
 ### Fixed
 
