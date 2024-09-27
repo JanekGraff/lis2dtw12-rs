@@ -396,7 +396,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Fifo threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
-        let t = if threshold > 31 { 31 } else { threshold };
+        let t = threshold.clamp(0, 31);
         self.modify_reg(Register::FIFO_CTRL, |v| {
             v & !FTH_MASK | threshold << FTH_SHIFT
         })
@@ -459,7 +459,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_x_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
-        let t = if threshold > 31 { 31 } else { threshold };
+        let t = threshold.clamp(0, 31);
         self.modify_reg(Register::TAP_THS_X, |v| {
             v & !TAP_THS_MASK | t << TAP_THS_SHIFT
         })
@@ -472,7 +472,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_y_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
-        let t = if threshold > 31 { 31 } else { threshold };
+        let t = threshold.clamp(0, 31);
         self.modify_reg(Register::TAP_THS_Y, |v| {
             v & !TAP_THS_MASK | t << TAP_THS_SHIFT
         })
@@ -485,7 +485,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Threshold is a 5-bit value (0-31)
     /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_z_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
-        let t = if threshold > 31 { 31 } else { threshold };
+        let t = threshold.clamp(0, 31);
         self.modify_reg(Register::TAP_THS_Z, |v| {
             v & !TAP_THS_MASK | t << TAP_THS_SHIFT
         })
