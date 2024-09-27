@@ -294,3 +294,45 @@ impl From<u8> for SixDSource {
         }
     }
 }
+
+/// All interrupt source
+/// This register is a combination of all interrupt sources
+pub struct AllInterruptSources {
+    /// Sleep change interrupt
+    /// false: no sleep change interrupt
+    /// true: sleep change interrupt
+    pub sleep_change_interrupt: bool,
+    /// 6D interrupt
+    /// false: no 6D interrupt
+    /// true: 6D interrupt
+    pub six_d_interrupt: bool,
+    /// Double-tap interrupt
+    /// false: no double-tap interrupt
+    /// true: double-tap interrupt
+    pub double_tap_interrupt: bool,
+    /// Single-tap interrupt
+    /// false: no single-tap interrupt
+    /// true: single-tap interrupt
+    pub single_tap_interrupt: bool,
+    /// Wake-up interrupt
+    /// false: no wake-up interrupt
+    /// true: wake-up interrupt
+    pub wake_up_interrupt: bool,
+    /// Free-fall interrupt
+    /// false: no free-fall interrupt
+    /// true: free-fall interrupt
+    pub free_fall_interrupt: bool,
+}
+
+impl From<u8> for AllInterruptSources {
+    fn from(value: u8) -> Self {
+        Self {
+            sleep_change_interrupt: value & ALL_INT_SLEEP_CHANGE_IA != 0,
+            six_d_interrupt: value & ALL_INT_6D_IA != 0,
+            double_tap_interrupt: value & ALL_INT_DOUBLE_TAP != 0,
+            single_tap_interrupt: value & ALL_INT_SINGLE_TAP != 0,
+            wake_up_interrupt: value & ALL_INT_WU_IA != 0,
+            free_fall_interrupt: value & ALL_INT_FF_IA != 0,
+        }
+    }
+}

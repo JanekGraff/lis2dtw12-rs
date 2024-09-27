@@ -166,3 +166,11 @@ pub const YH: u8 = 0b0000_1000;
 pub const YL: u8 = 0b0000_0100;
 pub const XH: u8 = 0b0000_0010;
 pub const XL: u8 = 0b0000_0001;
+
+// ------- ALL_INT_SRC ------- //
+pub const ALL_INT_SLEEP_CHANGE_IA: u8 = 0b0010_0000;
+pub const ALL_INT_6D_IA: u8 = 0b0001_0000;
+pub const ALL_INT_DOUBLE_TAP: u8 = 0b0000_1000;
+pub const ALL_INT_SINGLE_TAP: u8 = 0b0000_0100;
+pub const ALL_INT_WU_IA: u8 = 0b0000_0010;
+pub const ALL_INT_FF_IA: u8 = 0b0000_0001;

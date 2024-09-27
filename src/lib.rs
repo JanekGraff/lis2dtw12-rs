@@ -576,6 +576,16 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(SixDSource::from(source))
     }
 
+    /// Get all interrupt sources
+    ///
+    /// # NOTE
+    ///
+    /// Reading this register clears all interrupt function flags routed to the INT pads simultaneously!
+    pub async fn get_all_interrupt_sources(&mut self) -> Result<AllInterruptSources, I::Error> {
+        let source = self.read_reg(Register::ALL_INT_SRC).await?;
+        Ok(AllInterruptSources::from(source))
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
