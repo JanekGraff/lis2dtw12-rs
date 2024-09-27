@@ -1,5 +1,5 @@
 [package]
-name = "lis2dtw12-rs"
+name = "lis2dtw12"
 version = "0.1.0"
 authors = ["Janek Graff <janek.graff@posteo.net>"]
 repository = "https://github.com/JanekGraff/lis2dtw12-rs"
