@@ -24,7 +24,8 @@ use core::fmt::Debug;
 use registers::*;
 
 pub use crate::registers::{
-    BandwidthSelection, FullScale, LowPowerMode, Mode, OutputDataRate, TapPriority, Threshold6D,
+    BandwidthSelection, FreeFallThreshold, FullScale, LowPowerMode, Mode, OutputDataRate,
+    TapPriority, Threshold6D,
 };
 
 /// async interface
@@ -585,6 +586,87 @@ impl<I: Interface> Lis2dtw12<I> {
         let t = threshold.clamp(0, 63);
         self.modify_reg(Register::WAKE_UP_THS, |v| {
             v & !WK_THS_MASK | t << WK_THS_SHIFT
+        })
+        .await
+    }
+
+    /// Set the wake-up duration
+    ///
+    /// Wake-up duration. 1 LSB = 1 *1/ODR
+    ///
+    /// # NOTE
+    ///
+    /// Duration is a 2-bit value (0-3)
+    /// If the given duration value is greater than 3, it will be set to 3
+    pub async fn set_wake_up_duration(&mut self, duration: u8) -> Result<(), I::Error> {
+        let d = duration.clamp(0, 3);
+        self.modify_reg(Register::WAKE_UP_DUR, |v| {
+            v & !WK_DUR_MASK | d << WK_DUR_SHIFT
+        })
+        .await
+    }
+
+    /// Enable/Disable stationary detection / motion detection with no automatic ODR change
+    /// when detecting stationary state
+    /// enabled: Stationary detection enabled
+    /// disabled: Stationary detection disabled
+    /// Disabled by default
+    pub async fn enable_stationary_detection(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::WAKE_UP_DUR, STATIONARY).await
+        } else {
+            self.reg_reset_bits(Register::WAKE_UP_DUR, STATIONARY).await
+        }
+    }
+
+    /// Set duration to go i nsleep mode
+    ///
+    /// Default value is SLEEP_ DUR[3:0] = 0000 (which is 16 * 1/ODR).
+    /// 1 LSB = 512 * 1/ODR
+    ///
+    /// # NOTE
+    ///
+    /// Duration is a 4-bit value (0-15)
+    /// If the given duration value is greater than 15, it will be set to 15
+    pub async fn set_sleep_duration(&mut self, duration: u8) -> Result<(), I::Error> {
+        let d = duration.clamp(0, 15);
+        self.modify_reg(Register::WAKE_UP_DUR, |v| {
+            v & !SLEEP_DUR_MASK | d << SLEEP_DUR_SHIFT
+        })
+        .await
+    }
+
+    /// Set the free-fall duration
+    ///
+    /// 1 LSB = 1 * 1/ODR
+    ///
+    /// Default value is FF_DUR[5:0] = 000000
+    ///
+    /// # NOTE
+    ///
+    /// Duration is a 6-bit value (0-63)
+    /// If the given duration value is greater than 63, it will be set to 63
+    pub async fn set_free_fall_duration(&mut self, duration: u8) -> Result<(), I::Error> {
+        let d = duration.clamp(0, 63);
+        if d & 0b10_0000 > 0 {
+            self.reg_set_bits(Register::WAKE_UP_DUR, FF_DUR5).await?;
+        } else {
+            self.reg_reset_bits(Register::WAKE_UP_DUR, FF_DUR5).await?;
+        }
+        self.modify_reg(Register::FREE_FALL, |v| {
+            v & !FF_DUR_MASK | d << FF_DUR_SHIFT
+        })
+        .await
+    }
+
+    /// Set the free-fall threshold
+    /// Free-fall threshold @ FS = ±2 g
+    pub async fn set_free_fall_threshold(
+        &mut self,
+        threshold: FreeFallThreshold,
+    ) -> Result<(), I::Error> {
+        self.modify_reg(Register::FREE_FALL, |v| {
+            v & !FF_THS_MASK | (threshold as u8) << FF_THS_SHIFT
         })
         .await
     }

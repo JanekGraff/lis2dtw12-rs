@@ -151,6 +151,28 @@ pub enum TapPriority {
     ZYXAlt = 0b111,
 }
 
+/// Free-fall Threshold @ FS = ±2 g
+#[derive(Debug, Copy, Clone, Default)]
+pub enum FreeFallThreshold {
+    /// 5
+    #[default]
+    Ths5 = 0b000,
+    /// 7
+    Ths7 = 0b001,
+    /// 8
+    Ths8 = 0b010,
+    /// 10
+    Ths10 = 0b011,
+    /// 11
+    Ths11 = 0b100,
+    /// 13
+    Ths13 = 0b101,
+    /// 15
+    Ths15 = 0b110,
+    /// 16
+    Ths16 = 0b111,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
@@ -271,3 +293,17 @@ pub const SINGLE_DOUBLE_TAP: u8 = 0b1000_0000;
 pub const SLEEP_ON: u8 = 0b0100_0000;
 pub const WK_THS_MASK: u8 = 0b0011_1111;
 pub const WK_THS_SHIFT: u8 = 0;
+
+// ------- WAKE_UP_DUR ------- //
+pub const FF_DUR5: u8 = 0b1000_0000;
+pub const WK_DUR_MASK: u8 = 0b0110_0000;
+pub const WK_DUR_SHIFT: u8 = 5;
+pub const STATIONARY: u8 = 0b0001_0000;
+pub const SLEEP_DUR_MASK: u8 = 0b0000_1111;
+pub const SLEEP_DUR_SHIFT: u8 = 0;
+
+// ------- FREE_FALL ------- //
+pub const FF_DUR_MASK: u8 = 0b1111_1000;
+pub const FF_DUR_SHIFT: u8 = 3;
+pub const FF_THS_MASK: u8 = 0b0000_0111;
+pub const FF_THS_SHIFT: u8 = 0;
