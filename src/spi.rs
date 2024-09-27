@@ -7,9 +7,27 @@ use embedded_hal::digital::OutputPin;
 
 use crate::Interface;
 
+/// SPI interface for the driver
+/// This is a wrapper struct around an `embedded_hal::spi::SpiDevice` and an `embedded_hal::digital::OutputPin` (for CS)
+/// By using this wrapper struct, the driver can be used with any SPI device and any OutputPin that implements the `embedded_hal` traits
+/// It also allows us to easily support both I2C and SPI interfaces in the driver
 pub struct SPIInterface<SPI: SpiDevice, CS: OutputPin> {
-    pub spi: SPI,
-    pub cs: CS,
+    /// SPI device
+    spi: SPI,
+    /// Chip select pin
+    cs: CS,
+}
+
+impl<SPI: SpiDevice, CS: OutputPin> SPIInterface<SPI, CS> {
+    /// Create a new SPI interface from an SPI device and a chip select pin
+    /// that implement the `SpiDevice` and `OutputPin` traits respectively.
+    ///
+    /// # Arguments
+    /// * `spi` - SPI device
+    /// * `cs` - Chip select pin
+    pub fn new(spi: SPI, cs: CS) -> Self {
+        Self { spi, cs }
+    }
 }
 
 #[cfg(feature = "async")]
