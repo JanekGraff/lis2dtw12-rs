@@ -142,6 +142,31 @@ pub struct RawAccelerationData {
     pub z: i16,
 }
 
+/// FIFO Samples Status
+#[derive(Debug, Copy, Clone)]
+pub struct FifoSamplesStatus {
+    /// FIFO threshold status
+    /// false: FIFO filling is lower than the threshold level
+    /// true: FIFO filling is equal or higher than the threshold level
+    pub threshold: bool,
+    /// FIFO overrun status
+    /// false: FIFO is not overrun
+    /// true: FIFO is overrun
+    pub overrun: bool,
+    /// Number of unread samples in FIFO
+    pub samples: u8,
+}
+
+impl From<u8> for FifoSamplesStatus {
+    fn from(value: u8) -> Self {
+        Self {
+            threshold: value & FIFO_FTH != 0,
+            overrun: value & FIFO_OVR != 0,
+            samples: value & FIFO_DIFF,
+        }
+    }
+}
+
 /// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
@@ -364,12 +389,22 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Set the FIFO threshold
+    ///
+    /// # NOTE
+    /// Fifo threshold is a 5-bit value (0-31)
+    /// If the given threshold value is greater than 31, it will be set to 31
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
-        assert!(threshold <= 0b11111);
+        let t = if threshold > 31 { 31 } else { threshold };
         self.modify_reg(Register::FIFO_CTRL, |v| {
             v & !FTH_MASK | threshold << FTH_SHIFT
         })
         .await
+    }
+
+    /// Get the FIFO samples status
+    pub async fn get_fifo_samples_status(&mut self) -> Result<FifoSamplesStatus, I::Error> {
+        let status = self.read_reg(Register::FIFO_SAMPLES).await?;
+        Ok(FifoSamplesStatus::from(status))
     }
 
     #[inline]

@@ -113,6 +113,20 @@ pub enum FifoMode {
     Continuous = 0b110,
 }
 
+/// Thresholds for 4D/6D function @ FS = ±2 g
+#[derive(Debug, Copy, Clone, Default)]
+pub enum Threshold6D {
+    /// 6 (80°)
+    #[default]
+    Deg80 = 0b00,
+    /// 11 (70°)
+    Deg70 = 0b01,
+    /// 16 (60°)
+    Deg60 = 0b10,
+    /// 21 (50°)
+    Deg50 = 0b11,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
@@ -197,3 +211,8 @@ pub const FMODE_MASK: u8 = 0b1110_0000;
 pub const FMODE_SHIFT: u8 = 5;
 pub const FTH_MASK: u8 = 0b0001_1111;
 pub const FTH_SHIFT: u8 = 0;
+
+// ------- FIFO_SAMPLES ------- //
+pub const FIFO_FTH: u8 = 0b1000_0000;
+pub const FIFO_OVR: u8 = 0b0100_0000;
+pub const FIFO_DIFF: u8 = 0b0011_1111;
