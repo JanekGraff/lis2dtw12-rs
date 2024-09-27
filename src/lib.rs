@@ -547,6 +547,48 @@ impl<I: Interface> Lis2dtw12<I> {
             .await
     }
 
+    /// Enable/Disable double-tap detection
+    /// enabled: Single and double tap detection enabled
+    /// disabled: Only single tap detection enabled
+    /// Disabled by default
+    pub async fn enable_double_tap_detection(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::WAKE_UP_THS, SINGLE_DOUBLE_TAP)
+                .await
+        } else {
+            self.reg_reset_bits(Register::WAKE_UP_THS, SINGLE_DOUBLE_TAP)
+                .await
+        }
+    }
+
+    /// Enable/Disable sleep mode
+    /// enabled: Sleep mode enabled
+    /// disabled: Sleep mode disabled
+    /// Disabled by default
+    pub async fn enable_sleep_mode(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::WAKE_UP_THS, SLEEP_ON).await
+        } else {
+            self.reg_reset_bits(Register::WAKE_UP_THS, SLEEP_ON).await
+        }
+    }
+
+    /// Set the wake-up threshold
+    /// Wake-up threshold, 6-bit unsigned 1 LSB = 1/64 of FS.
+    /// Default value: 000000
+    ///
+    /// # NOTE
+    ///
+    /// Threshold is a 6-bit value (0-63)
+    /// If the given threshold value is greater than 63, it will be set to 63
+    pub async fn set_wake_up_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
+        let t = threshold.clamp(0, 63);
+        self.modify_reg(Register::WAKE_UP_THS, |v| {
+            v & !WK_THS_MASK | t << WK_THS_SHIFT
+        })
+        .await
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];

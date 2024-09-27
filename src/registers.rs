@@ -265,3 +265,9 @@ pub const QUIET_MASK: u8 = 0b0000_1100;
 pub const QUIET_SHIFT: u8 = 2;
 pub const SHOCK_MASK: u8 = 0b0000_0011;
 pub const SHOCK_SHIFT: u8 = 0;
+
+// ------- WAKE_UP_THS ------- //
+pub const SINGLE_DOUBLE_TAP: u8 = 0b1000_0000;
+pub const SLEEP_ON: u8 = 0b0100_0000;
+pub const WK_THS_MASK: u8 = 0b0011_1111;
+pub const WK_THS_SHIFT: u8 = 0;
