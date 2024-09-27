@@ -157,3 +157,12 @@ pub const TAP_SIGN: u8 = 0b0000_1000;
 pub const X_TAP: u8 = 0b0000_0100;
 pub const Y_TAP: u8 = 0b0000_0010;
 pub const Z_TAP: u8 = 0b0000_0001;
+
+// ------- SIXD_SRC ------- //
+pub const IA_6D: u8 = 0b0100_0000;
+pub const ZH: u8 = 0b0010_0000;
+pub const ZL: u8 = 0b0001_0000;
+pub const YH: u8 = 0b0000_1000;
+pub const YL: u8 = 0b0000_0100;
+pub const XH: u8 = 0b0000_0010;
+pub const XL: u8 = 0b0000_0001;

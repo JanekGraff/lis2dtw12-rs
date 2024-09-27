@@ -248,3 +248,49 @@ impl From<u8> for TapSource {
         }
     }
 }
+
+/// 6D source
+pub struct SixDSource {
+    /// Source of change in position (portrait/landscape/face-up/face-down)
+    /// false: no change in position detected
+    /// true: change in position detected
+    pub position_change_event: bool,
+    /// ZH over threshold
+    /// false: ZH is not over threshold
+    /// true: ZH is over threshold
+    pub zh_over_threshold: bool,
+    /// ZL over threshold
+    /// false: ZL is not over threshold
+    /// true: ZL is over threshold
+    pub zl_over_threshold: bool,
+    /// YH over threshold
+    /// false: YH is not over threshold
+    /// true: YH is over threshold
+    pub yh_over_threshold: bool,
+    /// YL over threshold
+    /// false: YL is not over threshold
+    /// true: YL is over threshold
+    pub yl_over_threshold: bool,
+    /// XH over threshold
+    /// false: XH is not over threshold
+    /// true: XH is over threshold
+    pub xh_over_threshold: bool,
+    /// XL over threshold
+    /// false: XL is not over threshold
+    /// true: XL is over threshold
+    pub xl_over_threshold: bool,
+}
+
+impl From<u8> for SixDSource {
+    fn from(value: u8) -> Self {
+        Self {
+            position_change_event: value & IA_6D != 0,
+            zh_over_threshold: value & ZH != 0,
+            zl_over_threshold: value & ZL != 0,
+            yh_over_threshold: value & YH != 0,
+            yl_over_threshold: value & YL != 0,
+            xh_over_threshold: value & XH != 0,
+            xl_over_threshold: value & XL != 0,
+        }
+    }
+}

@@ -570,6 +570,12 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(TapSource::from(source))
     }
 
+    /// Get the 6D source
+    pub async fn get_6d_source(&mut self) -> Result<SixDSource, I::Error> {
+        let source = self.read_reg(Register::SIXD_SRC).await?;
+        Ok(SixDSource::from(source))
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
