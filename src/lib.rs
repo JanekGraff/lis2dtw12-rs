@@ -586,6 +586,33 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(AllInterruptSources::from(source))
     }
 
+    /// Set the X axis user offset value
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `offset`: Two's complement user offset value on X-axis data, used for wake-up function
+    pub async fn set_x_offset(&mut self, offset: i8) -> Result<(), I::Error> {
+        self.write_reg(Register::X_OFS_USR, offset as u8).await
+    }
+
+    /// Set the Y axis user offset value
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `offset`: Two's complement user offset value on Y-axis data, used for wake-up function
+    pub async fn set_y_offset(&mut self, offset: i8) -> Result<(), I::Error> {
+        self.write_reg(Register::Y_OFS_USR, offset as u8).await
+    }
+
+    /// Set the Z axis user offset value
+    ///
+    /// # ARGUMENTS
+    ///
+    /// - `offset`: Two's complement user offset value on Z-axis data, used for wake-up function
+    pub async fn set_z_offset(&mut self, offset: i8) -> Result<(), I::Error> {
+        self.write_reg(Register::Z_OFS_USR, offset as u8).await
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];
