@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Implementation of Interface trait for embedded_hal\[_async\] v1.0 SpiDevice
+
 ### Fixed
 
 - Fix formatting of docstrings
