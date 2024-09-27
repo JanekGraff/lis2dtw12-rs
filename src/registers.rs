@@ -1,4 +1,5 @@
 #![allow(non_upper_case_globals)]
+#![allow(clippy::upper_case_acronyms)]
 
 use core::default;
 
@@ -127,6 +128,29 @@ pub enum Threshold6D {
     Deg50 = 0b11,
 }
 
+/// Tap Priority axis selection for tap detection
+/// MAX_PRIO, MID_PRIO, MIN_PRIO
+#[derive(Debug, Copy, Clone, Default)]
+pub enum TapPriority {
+    /// X, Y, Z
+    #[default]
+    XYZ = 0b000,
+    /// Y, X, Z
+    YXZ = 0b001,
+    /// X, Z, Y
+    XZY = 0b010,
+    /// Z, Y, X
+    ZYX = 0b011,
+    /// X, Y, Z (alternative), same as XYZ
+    XYZAlt = 0b100,
+    /// Y, Z, X
+    YZX = 0b101,
+    /// Z, X, Y
+    ZXY = 0b110,
+    /// Z, Y, X (alternative), same as ZYX
+    ZYXAlt = 0b111,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
@@ -216,3 +240,20 @@ pub const FTH_SHIFT: u8 = 0;
 pub const FIFO_FTH: u8 = 0b1000_0000;
 pub const FIFO_OVR: u8 = 0b0100_0000;
 pub const FIFO_DIFF: u8 = 0b0011_1111;
+
+// ------- TAP_THS_X/Y/Z  ------- //
+pub const TAP_THS_MASK: u8 = 0b0001_1111;
+pub const TAP_THS_SHIFT: u8 = 0;
+
+// ------- TAP_THS_X ------- //
+pub const EN_4D: u8 = 0b1000_0000;
+pub const THS_6D_MASK: u8 = 0b0110_0000;
+pub const THS_6D_SHIFT: u8 = 5;
+
+// ------- TAP_THS_Y ------- //
+pub const TAP_PRIOR_MASK: u8 = 0b1110_0000;
+pub const TAP_PRIOR_SHIFT: u8 = 5;
+
+// ------- TAP_THS_Z ------- //
+pub const TAP_XYZ_MASK: u8 = 0b1110_0000;
+pub const TAP_XYZ_SHIFT: u8 = 5;

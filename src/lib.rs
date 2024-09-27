@@ -23,7 +23,9 @@ use core::fmt::Debug;
 
 use registers::*;
 
-pub use crate::registers::{BandwidthSelection, FullScale, LowPowerMode, Mode, OutputDataRate};
+pub use crate::registers::{
+    BandwidthSelection, FullScale, LowPowerMode, Mode, OutputDataRate, TapPriority, Threshold6D,
+};
 
 /// async interface
 #[cfg(feature = "async")]
@@ -405,6 +407,89 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_fifo_samples_status(&mut self) -> Result<FifoSamplesStatus, I::Error> {
         let status = self.read_reg(Register::FIFO_SAMPLES).await?;
         Ok(FifoSamplesStatus::from(status))
+    }
+
+    /// Enable 4D decection portrait/landscape position
+    /// Disabled by default
+    pub async fn enable_4d_detection(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::TAP_THS_X, EN_4D).await
+        } else {
+            self.reg_reset_bits(Register::TAP_THS_X, EN_4D).await
+        }
+    }
+
+    /// Set the 6D threshold
+    /// Thresholds for 4D/6D function @ FS = ±2g
+    pub async fn set_6d_threshold(&mut self, threshold: Threshold6D) -> Result<(), I::Error> {
+        self.modify_reg(Register::TAP_THS_X, |v| {
+            v & !THS_6D_MASK | (threshold as u8) << THS_6D_SHIFT
+        })
+        .await
+    }
+
+    /// Set the tap priority
+    /// Tap Priority axis selection for tap detection
+    pub async fn set_tap_priority(&mut self, tap_priority: TapPriority) -> Result<(), I::Error> {
+        self.modify_reg(Register::TAP_THS_Y, |v| {
+            v & !TAP_PRIOR_MASK | (tap_priority as u8) << TAP_PRIOR_SHIFT
+        })
+        .await
+    }
+
+    /// Enable X/Y/Z direction tap recognition
+    pub async fn enable_xyz_tap_detection(
+        &mut self,
+        x_enable: bool,
+        y_enable: bool,
+        z_enable: bool,
+    ) -> Result<(), I::Error> {
+        let val = if x_enable { 0b100 } else { 0 }
+            | if y_enable { 0b010 } else { 0 }
+            | if z_enable { 0b001 } else { 0 };
+        self.modify_reg(Register::TAP_THS_Z, |v| {
+            v & TAP_XYZ_MASK | val << TAP_XYZ_SHIFT
+        })
+        .await
+    }
+
+    /// Set the tap Threshold for X direction
+    ///
+    /// # NOTE
+    /// Threshold is a 5-bit value (0-31)
+    /// If the given threshold value is greater than 31, it will be set to 31
+    pub async fn set_x_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
+        let t = if threshold > 31 { 31 } else { threshold };
+        self.modify_reg(Register::TAP_THS_X, |v| {
+            v & !TAP_THS_MASK | t << TAP_THS_SHIFT
+        })
+        .await
+    }
+
+    /// Set the tap Threshold for Y direction
+    ///
+    /// # NOTE
+    /// Threshold is a 5-bit value (0-31)
+    /// If the given threshold value is greater than 31, it will be set to 31
+    pub async fn set_y_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
+        let t = if threshold > 31 { 31 } else { threshold };
+        self.modify_reg(Register::TAP_THS_Y, |v| {
+            v & !TAP_THS_MASK | t << TAP_THS_SHIFT
+        })
+        .await
+    }
+
+    /// Set the tap Threshold for Z direction
+    ///
+    /// # NOTE
+    /// Threshold is a 5-bit value (0-31)
+    /// If the given threshold value is greater than 31, it will be set to 31
+    pub async fn set_z_tap_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
+        let t = if threshold > 31 { 31 } else { threshold };
+        self.modify_reg(Register::TAP_THS_Z, |v| {
+            v & !TAP_THS_MASK | t << TAP_THS_SHIFT
+        })
+        .await
     }
 
     #[inline]
