@@ -34,8 +34,8 @@ Dual licensed under your choice of either of:
 
 [crate-image]: https://img.shields.io/crates/v/lis2dtw12.svg
 [crate-link]: https://crates.io/crates/lis2dtw12
-[docs-image]: https://docs.rs/lis2dtw12/0.1.0/lis2dtw12/badge.svg
-[docs-link]: https://docs.rs/lis2dtw12/0.1.0/lis2dtw12/
+[docs-image]: https://docs.rs/lis2dtw12/badge.svg
+[docs-link]: https://docs.rs/lis2dtw12/
 [build-image]: https://github.com/JanekGraff/lis2dtw12-rs/actions/workflows/ci.yml/badge.svg?branch=main
 [build-link]: https://github.com/JanekGraff/lis2dtw12-rs/actions
 [deps-image]: https://deps.rs/repo/github/janekgraff/lis2dtw12-rs/status.svg
