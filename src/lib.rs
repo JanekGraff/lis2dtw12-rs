@@ -23,7 +23,7 @@ use core::fmt::Debug;
 
 use registers::*;
 
-pub use crate::registers::{LowPowerMode, Mode, OutputDataRate};
+pub use crate::registers::{BandwidthSelection, FullScale, LowPowerMode, Mode, OutputDataRate};
 
 /// async interface
 #[cfg(feature = "async")]
@@ -76,6 +76,7 @@ pub struct Lis2dtw12<I> {
     interface: I,
     mode: Mode,
     low_power_mode: LowPowerMode,
+    fullscale: FullScale,
 }
 
 /// LIS2DTW12 driver
@@ -87,6 +88,7 @@ impl<I: Interface> Lis2dtw12<I> {
             interface,
             mode: Mode::default(),
             low_power_mode: LowPowerMode::default(),
+            fullscale: FullScale::default(),
         }
     }
 
@@ -165,6 +167,46 @@ impl<I: Interface> Lis2dtw12<I> {
             self.reg_set_bits(Register::CTRL3, BDU).await
         } else {
             self.reg_reset_bits(Register::CTRL3, BDU).await
+        }
+    }
+
+    /// Set the bandwidth selection
+    pub async fn set_bandwidth(&mut self, bandwidth: BandwidthSelection) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL6, |v| {
+            v & !BW_FILT_MASK | (bandwidth as u8) << BW_FILT_SHIFT
+        })
+        .await
+    }
+
+    /// Set the full-scale selection
+    pub async fn set_full_scale(&mut self, full_scale: FullScale) -> Result<(), I::Error> {
+        self.modify_reg(Register::CTRL1, |v| {
+            v & !FS_MASK | (full_scale as u8) << FS_SHIFT
+        })
+        .await?;
+        self.fullscale = full_scale;
+        Ok(())
+    }
+
+    /// Enable/Disable Filtered data type selection
+    /// disabled: low-pass filter path selected
+    /// enabled: high-pass filter path selected
+    /// Disabled by default
+    pub async fn enable_filtered_data_selection(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL6, FDS).await
+        } else {
+            self.reg_reset_bits(Register::CTRL6, FDS).await
+        }
+    }
+
+    /// Enable/Disable low-noise configuration
+    /// Disabled by default
+    pub async fn enable_low_noise(&mut self, enable: bool) -> Result<(), I::Error> {
+        if enable {
+            self.reg_set_bits(Register::CTRL6, FDS).await
+        } else {
+            self.reg_reset_bits(Register::CTRL6, FDS).await
         }
     }
 

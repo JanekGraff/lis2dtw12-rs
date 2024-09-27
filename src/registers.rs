@@ -55,6 +55,34 @@ pub enum LowPowerMode {
     Mode4 = 0b11,
 }
 
+/// Digital filtering cutoff selection / Bandwidth selection
+#[derive(Debug, Copy, Clone, Default)]
+pub enum BandwidthSelection {
+    /// ODR/2 (up to ODR = 800 Hz, 400 Hz when ODR = 1600 Hz)
+    #[default]
+    OdrDiv2 = 0b00,
+    /// ODR/4 (HP/LP)
+    OdrDiv4 = 0b01,
+    /// ODR/10 (HP/LP)
+    OdrDiv10 = 0b10,
+    /// ODR/20 (HP/LP)
+    OdrDiv20 = 0b11,
+}
+
+/// Full-scale selection
+#[derive(Debug, Copy, Clone, Default)]
+pub enum FullScale {
+    /// ±2 g
+    #[default]
+    G2 = 0b00,
+    /// ±4 g
+    G4 = 0b01,
+    /// ±8 g
+    G8 = 0b10,
+    /// ±16 g
+    G16 = 0b11,
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
@@ -115,3 +143,11 @@ pub const LP_MODE_SHIFT: u8 = 0;
 pub const SOFT_RESET: u8 = 0b0100_0000;
 pub const CS_PU_DISC: u8 = 0b0001_0000;
 pub const BDU: u8 = 0b0000_1000;
+
+// ------- CTRL6 ------- //
+pub const BW_FILT_MASK: u8 = 0b1100_0000;
+pub const BW_FILT_SHIFT: u8 = 6;
+pub const FS_MASK: u8 = 0b0011_0000;
+pub const FS_SHIFT: u8 = 4;
+pub const FDS: u8 = 0b0000_1000;
+pub const LOW_NOISE: u8 = 0b0000_0100;
