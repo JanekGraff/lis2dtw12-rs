@@ -146,7 +146,7 @@ impl<I: Interface> Lis2dtw12<I> {
 
     /// Set the full-scale selection
     pub async fn set_full_scale(&mut self, full_scale: FullScale) -> Result<(), I::Error> {
-        self.modify_reg(Register::CTRL1, |v| {
+        self.modify_reg(Register::CTRL6, |v| {
             v & !FS_MASK | (full_scale as u8) << FS_SHIFT
         })
         .await?;
