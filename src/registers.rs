@@ -313,3 +313,11 @@ pub const OVR: u8 = 0b1000_0000;
 pub const DRDY_T: u8 = 0b0100_0000;
 pub const SLEEP_STATE_IA: u8 = 0b0010_0000;
 // remaining bits are the same as STATUS
+
+// ------- WAKE_UP_SRC ------- //
+pub const WAKE_UP_FF_IA: u8 = 0b0010_0000;
+pub const WAKE_UP_SLEEP_STATE_IA: u8 = 0b0001_0000;
+pub const WAKE_UP_WU_IA: u8 = 0b0000_1000;
+pub const X_WU: u8 = 0b0000_0100;
+pub const Y_WU: u8 = 0b0000_0010;
+pub const Z_WU: u8 = 0b0000_0001;

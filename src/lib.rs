@@ -222,6 +222,30 @@ impl From<u8> for FifoSamplesStatus {
     }
 }
 
+/// Wake-up source
+#[derive(Debug, Copy, Clone)]
+pub struct WakeUpSource {
+    free_fall_event: bool,
+    sleep_event: bool,
+    wake_up_event: bool,
+    x_wake_up_event: bool,
+    y_wake_up_event: bool,
+    z_wake_up_event: bool,
+}
+
+impl From<u8> for WakeUpSource {
+    fn from(value: u8) -> Self {
+        Self {
+            free_fall_event: value & WAKE_UP_FF_IA != 0,
+            sleep_event: value & WAKE_UP_SLEEP_STATE_IA != 0,
+            wake_up_event: value & WAKE_UP_WU_IA != 0,
+            x_wake_up_event: value & X_WU != 0,
+            y_wake_up_event: value & Y_WU != 0,
+            z_wake_up_event: value & Z_WU != 0,
+        }
+    }
+}
+
 /// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
@@ -751,6 +775,12 @@ impl<I: Interface> Lis2dtw12<I> {
             v & !FF_THS_MASK | (threshold as u8) << FF_THS_SHIFT
         })
         .await
+    }
+
+    /// Get the wake-up source
+    pub async fn get_wake_up_source(&mut self) -> Result<WakeUpSource, I::Error> {
+        let source = self.read_reg(Register::WAKE_UP_SRC).await?;
+        Ok(WakeUpSource::from(source))
     }
 
     #[inline]
