@@ -6,16 +6,14 @@ repository = "https://github.com/JanekGraff/lis2dtw12-rs"
 license = "Apache-2.0 OR MIT"
 description = "no_std library for the LIS2DTW12 dual motion and temperature sensor using embedded-hal traits"
 readme = "README.md"
-keywords = [
-    "lis2dtw12",
-    "embedded-hal",
-    "no_std",
-    "i2c",
-    "accelerometer",
-    "temperature",
-    "sensor",
+keywords = ["embedded-hal", "no_std", "accelerometer", "sync", "async"]
+categories = [
+    "embedded",
+    "no-std",
+    "hardware-support",
+    "asynchronous",
+    "no-std::no-alloc",
 ]
-categories = ["embedded", "no-std", "sensors", "hardware-support"]
 edition = "2021"
 
 exclude = [".github"]
