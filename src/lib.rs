@@ -121,6 +121,26 @@ impl From<u8> for Status {
     }
 }
 
+/// Acceleration data
+pub struct AccelerationData {
+    /// X-axis acceleration
+    pub x: f32,
+    /// Y-axis acceleration
+    pub y: f32,
+    /// Z-axis acceleration
+    pub z: f32,
+}
+
+/// RAW acceleration data
+pub struct RawAccelerationData {
+    /// X-axis acceleration
+    pub x: i16,
+    /// Y-axis acceleration
+    pub y: i16,
+    /// Z-axis acceleration
+    pub z: i16,
+}
+
 /// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
@@ -151,6 +171,13 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Read the WHO_AM_I register
     pub async fn get_device_id(&mut self) -> Result<u8, I::Error> {
         self.read_reg(Register::WHO_AM_I).await
+    }
+
+    /// Read the RAW temperature data
+    pub async fn get_temperature_raw(&mut self) -> Result<i16, I::Error> {
+        let mut buffer = [0; 2];
+        self.read_regs(Register::OUT_T_L, &mut buffer).await?;
+        Ok((buffer[1] as i16) << 8 | buffer[0] as i16)
     }
 
     /// Read the temperature data
@@ -265,6 +292,66 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_status(&mut self) -> Result<Status, I::Error> {
         let status = self.read_reg(Register::STATUS).await?;
         Ok(Status::from(status))
+    }
+
+    /// Get the X-axis RAW acceleration data
+    pub async fn get_x_accel_raw(&mut self) -> Result<i16, I::Error> {
+        let mut buffer = [0; 2];
+        self.read_regs(Register::OUT_X_L, &mut buffer).await?;
+        Ok((buffer[1] as i16) << 8 | buffer[0] as i16)
+    }
+
+    /// Get the Y-axis RAW acceleration data
+    pub async fn get_y_accel_raw(&mut self) -> Result<i16, I::Error> {
+        let mut buffer = [0; 2];
+        self.read_regs(Register::OUT_Y_L, &mut buffer).await?;
+        Ok((buffer[1] as i16) << 8 | buffer[0] as i16)
+    }
+
+    /// Get the Z-axis RAW acceleration data
+    pub async fn get_z_accel_raw(&mut self) -> Result<i16, I::Error> {
+        let mut buffer = [0; 2];
+        self.read_regs(Register::OUT_Z_L, &mut buffer).await?;
+        Ok((buffer[1] as i16) << 8 | buffer[0] as i16)
+    }
+
+    /// Get the X-axis acceleration data
+    pub async fn get_x_accel(&mut self) -> Result<f32, I::Error> {
+        let raw = self.get_x_accel_raw().await?;
+        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+    }
+
+    /// Get the Y-axis acceleration data
+    pub async fn get_y_accel(&mut self) -> Result<f32, I::Error> {
+        let raw = self.get_y_accel_raw().await?;
+        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+    }
+
+    /// Get the Z-axis acceleration data
+    pub async fn get_z_accel(&mut self) -> Result<f32, I::Error> {
+        let raw = self.get_z_accel_raw().await?;
+        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+    }
+
+    /// Get the RAW acceleration data
+    pub async fn get_accel_data_raw(&mut self) -> Result<RawAccelerationData, I::Error> {
+        let mut buffer = [0; 6];
+        self.read_regs(Register::OUT_X_L, &mut buffer).await?;
+        Ok(RawAccelerationData {
+            x: (buffer[1] as i16) << 8 | buffer[0] as i16,
+            y: (buffer[3] as i16) << 8 | buffer[2] as i16,
+            z: (buffer[5] as i16) << 8 | buffer[4] as i16,
+        })
+    }
+
+    /// Get the acceleration data
+    pub async fn get_accel_data(&mut self) -> Result<AccelerationData, I::Error> {
+        let raw = self.get_accel_data_raw().await?;
+        Ok(AccelerationData {
+            x: self.fullscale.convert_raw_i16_to_g(raw.x),
+            y: self.fullscale.convert_raw_i16_to_g(raw.y),
+            z: self.fullscale.convert_raw_i16_to_g(raw.z),
+        })
     }
 
     #[inline]

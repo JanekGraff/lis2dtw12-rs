@@ -83,6 +83,20 @@ pub enum FullScale {
     G16 = 0b11,
 }
 
+impl FullScale {
+    pub(crate) fn convert_raw_i16_to_g(self, raw: i16) -> f32 {
+        let factor = match self {
+            // TODO: ?
+            FullScale::G2 => 0.061,
+            FullScale::G4 => 0.122,
+            FullScale::G8 => 0.244,
+            FullScale::G16 => 0.488,
+        };
+        // TODO: Need to factor in the resolution?
+        (raw >> 2) as f32 * factor
+    }
+}
+
 #[allow(dead_code)]
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
