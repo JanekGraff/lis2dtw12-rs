@@ -151,3 +151,13 @@ pub const FS_MASK: u8 = 0b0011_0000;
 pub const FS_SHIFT: u8 = 4;
 pub const FDS: u8 = 0b0000_1000;
 pub const LOW_NOISE: u8 = 0b0000_0100;
+
+// ------- STATUS ------- //
+pub const FIFO_THS: u8 = 0b1000_0000;
+pub const WU_IA: u8 = 0b0100_0000;
+pub const SLEEP_STATE: u8 = 0b0010_0000;
+pub const DOUBLE_TAP: u8 = 0b0001_0000;
+pub const SINGLE_TAP: u8 = 0b0000_1000;
+pub const D6D_IA: u8 = 0b0000_0100;
+pub const FF_IA: u8 = 0b0000_0010;
+pub const DRDY: u8 = 0b0000_0001;

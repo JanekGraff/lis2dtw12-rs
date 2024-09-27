@@ -70,6 +70,57 @@ impl<I: Interface> Interface for &mut I {
     }
 }
 
+/// Struct representation of the Status register
+pub struct Status {
+    /// FIFO threshold status
+    /// false: FIFO filling is lower than the threshold level
+    /// true: FIFO filling is equal or higher than the threshold level
+    pub fifo_threshold: bool,
+    /// Wake up event detection
+    /// false: no wake-up event detected
+    /// true: wake-up event detected
+    pub wake_up_event: bool,
+    /// Sleep event status
+    /// false: no sleep event detected
+    /// true: sleep event detected
+    pub sleep_event: bool,
+    /// Double-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub double_tap_event: bool,
+    /// Single-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub single_tap_event: bool,
+    /// Source of change in position (portrait/landscape/face-up/face-down)
+    /// false: no change in position detected
+    /// true: change in position detected
+    pub position_change_event: bool,
+    /// Free-fall event detection status
+    /// false: no free-fall event detected
+    /// true: free-fall event detected
+    pub free_fall_event: bool,
+    /// Data ready status
+    /// false: no data is available
+    /// true: X-, Y- and Z-axis new data available
+    pub data_ready: bool,
+}
+
+impl From<u8> for Status {
+    fn from(value: u8) -> Self {
+        Self {
+            fifo_threshold: value & 0b1000_0000 != 0,
+            wake_up_event: value & 0b0100_0000 != 0,
+            sleep_event: value & 0b0010_0000 != 0,
+            double_tap_event: value & 0b0001_0000 != 0,
+            single_tap_event: value & 0b0000_1000 != 0,
+            position_change_event: value & 0b0000_0100 != 0,
+            free_fall_event: value & 0b0000_0010 != 0,
+            data_ready: value & 0b0000_0001 != 0,
+        }
+    }
+}
+
 /// LIS2DTW12 driver
 #[maybe_async_cfg::maybe(sync(feature = "blocking", keep_self), async(feature = "async"))]
 pub struct Lis2dtw12<I> {
@@ -208,6 +259,12 @@ impl<I: Interface> Lis2dtw12<I> {
         } else {
             self.reg_reset_bits(Register::CTRL6, FDS).await
         }
+    }
+
+    /// Get the status of the device
+    pub async fn get_status(&mut self) -> Result<Status, I::Error> {
+        let status = self.read_reg(Register::STATUS).await?;
+        Ok(Status::from(status))
     }
 
     #[inline]
