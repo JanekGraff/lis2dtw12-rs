@@ -80,16 +80,27 @@ pub enum FullScale {
 }
 
 impl FullScale {
-    pub(crate) fn convert_raw_i16_to_g(self, raw: i16) -> f32 {
+    pub(crate) fn convert_raw_i16_to_mg(
+        self,
+        raw: i16,
+        set_mode: Mode,
+        set_lp_mode: LowPowerMode,
+    ) -> f32 {
+        // mg/digit
         let factor = match self {
-            // TODO: ?
-            FullScale::G2 => 0.061,
-            FullScale::G4 => 0.122,
-            FullScale::G8 => 0.244,
-            FullScale::G16 => 0.488,
+            FullScale::G2 => 0.244,
+            FullScale::G4 => 0.488,
+            FullScale::G8 => 0.976,
+            FullScale::G16 => 1.952,
         };
-        // TODO: Need to factor in the resolution?
-        (raw >> 2) as f32 * factor
+
+        let aligned = match (set_mode, set_lp_mode) {
+            // 12-bit resolution, only active on LowPowerMode::Mode1
+            (Mode::LowPower | Mode::SingleDataConversion, LowPowerMode::Mode1) => (raw >> 4) as f32,
+            // 14-bit resolution, active in every other mode
+            (_, _) => (raw >> 2) as f32,
+        };
+        aligned * factor
     }
 }
 

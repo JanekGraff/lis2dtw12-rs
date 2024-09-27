@@ -213,6 +213,10 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the X-axis RAW acceleration data
+    ///
+    /// # NOTE
+    ///
+    /// The data is 12/14-bit (depending on [`Mode`](crate::Lis2dtw12::set_mode) and [`LowPowerMode`](crate::Lis2dtw12::set_low_power_mode)) left-justified!
     pub async fn get_x_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_X_L, &mut buffer).await?;
@@ -220,6 +224,10 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the Y-axis RAW acceleration data
+    ///
+    /// # NOTE
+    ///
+    /// The data is 12/14-bit (depending on `Mode` and `LowPowerMode`) left-justified!
     pub async fn get_y_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_Y_L, &mut buffer).await?;
@@ -227,6 +235,10 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the Z-axis RAW acceleration data
+    ///
+    /// # NOTE
+    ///
+    /// The data is 12/14-bit (depending on `Mode` and `LowPowerMode`) left-justified!
     pub async fn get_z_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_Z_L, &mut buffer).await?;
@@ -234,24 +246,46 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the X-axis acceleration data
+    ///
+    /// # Returns
+    ///
+    /// - X-Acceleration in **mg**
     pub async fn get_x_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_x_accel_raw().await?;
-        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+        Ok(self
+            .fullscale
+            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
     }
 
     /// Get the Y-axis acceleration data
+    ///
+    /// # Returns
+    ///
+    /// - Y-Acceleration in **mg**
     pub async fn get_y_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_y_accel_raw().await?;
-        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+        Ok(self
+            .fullscale
+            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
     }
 
     /// Get the Z-axis acceleration data
+    ///
+    /// # Returns
+    ///
+    /// - Z-Acceleration in **mg**
     pub async fn get_z_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_z_accel_raw().await?;
-        Ok(self.fullscale.convert_raw_i16_to_g(raw))
+        Ok(self
+            .fullscale
+            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
     }
 
     /// Get the RAW acceleration data
+    ///
+    /// # NOTE
+    ///
+    /// The data is 12/14-bit (depending on `Mode` and `LowPowerMode`) left-justified!
     pub async fn get_accel_data_raw(&mut self) -> Result<RawAccelerationData, I::Error> {
         let mut buffer = [0; 6];
         self.read_regs(Register::OUT_X_L, &mut buffer).await?;
@@ -263,12 +297,22 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Get the acceleration data
+    ///
+    /// # Returns
+    ///
+    /// - `AccelerationData` struct containing the acceleration data in **mg**
     pub async fn get_accel_data(&mut self) -> Result<AccelerationData, I::Error> {
         let raw = self.get_accel_data_raw().await?;
         Ok(AccelerationData {
-            x: self.fullscale.convert_raw_i16_to_g(raw.x),
-            y: self.fullscale.convert_raw_i16_to_g(raw.y),
-            z: self.fullscale.convert_raw_i16_to_g(raw.z),
+            x: self
+                .fullscale
+                .convert_raw_i16_to_mg(raw.x, self.mode, self.low_power_mode),
+            y: self
+                .fullscale
+                .convert_raw_i16_to_mg(raw.y, self.mode, self.low_power_mode),
+            z: self
+                .fullscale
+                .convert_raw_i16_to_mg(raw.z, self.mode, self.low_power_mode),
         })
     }
 
