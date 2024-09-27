@@ -148,3 +148,12 @@ pub const WAKE_UP_WU_IA: u8 = 0b0000_1000;
 pub const X_WU: u8 = 0b0000_0100;
 pub const Y_WU: u8 = 0b0000_0010;
 pub const Z_WU: u8 = 0b0000_0001;
+
+// ------- TAP_SRC ------- //
+pub const TAP_IA: u8 = 0b0100_0000;
+pub const TAP_SRC_SINGLE_TAP: u8 = 0b0010_0000;
+pub const TAP_SRC_DOUBLE_TAP: u8 = 0b0001_0000;
+pub const TAP_SIGN: u8 = 0b0000_1000;
+pub const X_TAP: u8 = 0b0000_0100;
+pub const Y_TAP: u8 = 0b0000_0010;
+pub const Z_TAP: u8 = 0b0000_0001;

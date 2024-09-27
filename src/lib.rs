@@ -564,6 +564,12 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(WakeUpSource::from(source))
     }
 
+    /// Get the tap source
+    pub async fn get_tap_source(&mut self) -> Result<TapSource, I::Error> {
+        let source = self.read_reg(Register::TAP_SRC).await?;
+        Ok(TapSource::from(source))
+    }
+
     #[inline]
     async fn read_reg(&mut self, reg: Register) -> Result<u8, I::Error> {
         let mut data = [0];

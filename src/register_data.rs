@@ -190,3 +190,61 @@ impl From<u8> for WakeUpSource {
         }
     }
 }
+
+/// Sign of the tap event
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum Sign {
+    /// Positive sign
+    Positive,
+    /// Negative sign
+    Negative,
+}
+
+/// Tap source
+#[derive(Debug, Copy, Clone)]
+pub struct TapSource {
+    /// Tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub tap_event: bool,
+    /// Single-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub single_tap_event: bool,
+    /// Double-tap event status
+    /// false: no tap event detected
+    /// true: tap event detected
+    pub double_tap_event: bool,
+    /// Tap sign
+    pub tap_sign: Sign,
+    /// X-axis tap event detection
+    /// false: no tap event detected
+    /// true: tap event on X-axis detected
+    pub x_tap_event: bool,
+    /// Y-axis tap event detection
+    /// false: no tap event detected
+    /// true: tap event on Y-axis detected
+    pub y_tap_event: bool,
+    /// Z-axis tap event detection
+    /// false: no tap event detected
+    /// true: tap event on Z-axis detected
+    pub z_tap_event: bool,
+}
+
+impl From<u8> for TapSource {
+    fn from(value: u8) -> Self {
+        Self {
+            tap_event: value & TAP_IA != 0,
+            single_tap_event: value & TAP_SRC_SINGLE_TAP != 0,
+            double_tap_event: value & TAP_SRC_DOUBLE_TAP != 0,
+            tap_sign: if value & TAP_SIGN == 0 {
+                Sign::Positive
+            } else {
+                Sign::Negative
+            },
+            x_tap_event: value & X_TAP != 0,
+            y_tap_event: value & Y_TAP != 0,
+            z_tap_event: value & Z_TAP != 0,
+        }
+    }
+}
