@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [v0.1.2]
+
+### Changed
+
+### Added
+
+### Fixed
+
 - Properly re-export SlaveAddr enum in interface.rs
 
 ## [v0.1.1]
@@ -30,3 +38,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.1...HEAD
 [v0.1.1]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.0...v0.1.1
+[v0.1.2]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.1...v0.1.2

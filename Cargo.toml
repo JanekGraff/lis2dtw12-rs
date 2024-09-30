@@ -1,6 +1,6 @@
 [package]
 name = "lis2dtw12"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Janek Graff <janek.graff@posteo.net>"]
 repository = "https://github.com/JanekGraff/lis2dtw12-rs"
 license = "Apache-2.0 OR MIT"
