@@ -12,8 +12,8 @@ The driver supports async and blocking modes, selectable with the `async` and `b
 
 ## Resources
 
-- [LIS2DH12 product page][product-page]
-- [LIS2DH12 datasheet][datasheet]
+- [LIS2DTW12 product page][product-page]
+- [LIS2DTW12 datasheet][datasheet]
 
 ## NOTE
 
