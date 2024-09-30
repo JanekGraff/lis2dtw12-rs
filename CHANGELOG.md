@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Properly re-export SlaveAddr enum in interface.rs
+
 ## [v0.1.1]
 
 ### Changed

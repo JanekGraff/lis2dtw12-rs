@@ -1,6 +1,6 @@
 use core::fmt::Debug;
 
-pub use crate::i2c::I2CInterface;
+pub use crate::i2c::{I2CInterface, SlaveAddr};
 pub use crate::spi::{SPIBusInterface, SPIInterface};
 
 /// async interface
