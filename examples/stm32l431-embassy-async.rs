@@ -12,6 +12,7 @@ use embassy_stm32::time;
 use embassy_time::{Duration, Timer};
 use lis2dtw12::interface::{I2CInterface, SlaveAddr};
 use lis2dtw12::Lis2dtw12Async;
+use lis2dtw12::Mode;
 
 bind_interrupts!(struct Irqs {
     I2C1_EV => i2c::EventInterruptHandler<I2C1>;
@@ -33,8 +34,9 @@ async fn main(_spawner: Spawner) {
         time::khz(100),
         Default::default(),
     );
-    let interface = I2CInterface::new(i2c, SlaveAddr::Default);
+    let interface = I2CInterface::new(i2c, SlaveAddr::Alternative(true));
     let mut accelerometer = Lis2dtw12Async::new(interface);
+    accelerometer.set_mode(Mode::HighPerformance).await.unwrap();
     defmt::info!(
         "Found device ID: {}",
         accelerometer.get_device_id().await.unwrap()
