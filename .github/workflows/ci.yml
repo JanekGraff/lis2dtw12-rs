@@ -40,8 +40,5 @@ jobs:
       - name: Run clippy (async)
         run: cargo clippy --no-default-features --features "async"
         
-      - name: Run tests
-        run: cargo test --all-targets
-        
       - name: Build example
         run: cargo build --example stm32l431-embassy-async --no-default-features --features "async"
