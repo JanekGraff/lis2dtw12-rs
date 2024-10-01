@@ -11,7 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Basic async embassy example for and STM32L431
+
 ### Fixed
+
+- Fix default OutputDataRate setting
 
 - Fix typo in README
 
