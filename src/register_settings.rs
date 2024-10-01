@@ -16,11 +16,11 @@ pub enum Mode {
 #[derive(Debug, Copy, Clone, Default)]
 pub enum OutputDataRate {
     /// Power-down mode
-    #[default]
     PowerDown = 0b0000,
     /// 12.5 Hz / 1.6 Hz
     Hz1_6 = 0b0001,
     /// 12.5 Hz / 12.5 Hz
+    #[default]
     Hz12_5 = 0b0010,
     /// 25 Hz / 25 Hz
     Hz25 = 0b0011,
