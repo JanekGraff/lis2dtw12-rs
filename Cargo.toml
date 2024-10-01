@@ -16,7 +16,7 @@ categories = [
 ]
 edition = "2021"
 
-exclude = [".github", "memory.x", ".cargo"]
+exclude = [".github", "memory.x", ".cargo", "rust-toolchain.toml"]
 
 [dependencies]
 embedded-hal = "1.0"
