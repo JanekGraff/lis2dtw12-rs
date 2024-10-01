@@ -15,9 +15,17 @@ The driver supports async and blocking modes, selectable with the `async` and `b
 - [LIS2DTW12 product page][product-page]
 - [LIS2DTW12 datasheet][datasheet]
 
-## NOTE
+## Running examples
 
-This crate is still a WIP and at this point, it is just a theoretical implementation of the datasheet as my sensor has not arrived yet.
+### NOTE
+
+You may need to adjust the features for embassy depending on the chip you're using. This is just a configuration i was using when developing this.
+
+The example can be run like this:
+
+```bash
+cargo run --example stm32l431-embassy-async --no-default-features --features "async"
+```
 
 ## Contributing
 
