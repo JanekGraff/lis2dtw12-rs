@@ -23,6 +23,39 @@ embedded-hal = "1.0"
 embedded-hal-async = { version = "1.0", optional = true }
 maybe-async-cfg = "0.2.1"
 
+[dev-dependencies]
+cortex-m = { version = "0.7.6", features = ["critical-section-single-core"] }
+cortex-m-rt = "0.7.3"
+embedded-hal = "1.0.0"
+embedded-hal-async = "1.0.0"
+embedded-hal-bus = { version = "0.2.0", features = ["async"] }
+nb = "1.1.0"
+
+# Embassy asnyc
+embassy-executor = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "arch-cortex-m",
+    "executor-thread",
+    "integrated-timers",
+] }
+embassy-futures = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-embedded-hal = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-sync = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-time = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "tick-hz-32_768",
+] }
+embassy-stm32 = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "unstable-pac",
+    "memory-x",
+    "exti",
+    "chrono",
+    "stm32l431vc",
+    "time-driver-tim15",
+] }
+
+panic-probe = { version = "0.3.2", features = ["print-defmt"] }
+defmt = "0.3.8"
+defmt-rtt = "0.4.1"
+
 [features]
 default = ["blocking"]
 blocking = []
@@ -30,3 +63,7 @@ async = ["dep:embedded-hal-async"]
 
 [profile.release]
 lto = true
+
+[[example]]
+name = "stm32l431-embassy-async"
+required-features = ["async"]
