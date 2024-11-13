@@ -1,3 +1,9 @@
+use crate::{
+    INT1_6D, INT1_DIFF5, INT1_DRDY, INT1_FF, INT1_FTH, INT1_SINGLE_TAP, INT1_TAP, INT1_WU,
+    INT2_BOOT, INT2_DIFF5, INT2_DRDY, INT2_DRDY_T, INT2_FTH, INT2_OVR, INT2_SLEEP_CHG,
+    INT2_SLEEP_STATE,
+};
+
 /// Operating Mode
 #[derive(Debug, Copy, Clone, Default)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -188,4 +194,140 @@ pub enum FreeFallThreshold {
     Ths15 = 0b110,
     /// 16
     Ths16 = 0b111,
+}
+
+/// INT1 PAD Configuration
+#[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub struct Int1PadConfig {
+    /// 6D recognition interrupt
+    pub int1_6d: bool,
+    /// Single-tap recognition interrupt
+    pub int1_single_tap: bool,
+    /// Wake-up recognition interrupt
+    pub int1_wu: bool,
+    /// Free-fall recognition interrupt
+    pub int1_ff: bool,
+    /// Double-tap recognition interrupt
+    pub int1_tap: bool,
+    /// Fifo full recognition interrupt
+    pub int1_diff5: bool,
+    /// Fifo threshold interrupt
+    pub int1_fth: bool,
+    /// Data ready interrupt
+    pub int1_drdy: bool,
+}
+
+impl From<u8> for Int1PadConfig {
+    fn from(value: u8) -> Self {
+        Self {
+            int1_6d: value & INT1_6D != 0,
+            int1_single_tap: value & INT1_SINGLE_TAP != 0,
+            int1_wu: value & INT1_WU != 0,
+            int1_ff: value & INT1_FF != 0,
+            int1_tap: value & INT1_TAP != 0,
+            int1_diff5: value & INT1_DIFF5 != 0,
+            int1_fth: value & INT1_FTH != 0,
+            int1_drdy: value & INT1_DRDY != 0,
+        }
+    }
+}
+
+impl From<Int1PadConfig> for u8 {
+    fn from(value: Int1PadConfig) -> Self {
+        let mut result = 0;
+        if value.int1_6d {
+            result |= INT1_6D;
+        }
+        if value.int1_single_tap {
+            result |= INT1_SINGLE_TAP;
+        }
+        if value.int1_wu {
+            result |= INT1_WU;
+        }
+        if value.int1_ff {
+            result |= INT1_FF;
+        }
+        if value.int1_tap {
+            result |= INT1_TAP;
+        }
+        if value.int1_diff5 {
+            result |= INT1_DIFF5;
+        }
+        if value.int1_fth {
+            result |= INT1_FTH;
+        }
+        if value.int1_drdy {
+            result |= INT1_DRDY;
+        }
+        result
+    }
+}
+
+/// INT2 PAD Configuration
+#[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub struct Int2PadConfig {
+    /// Route SLEEP_STATE to INT2 pad
+    pub int2_sleep_state: bool,
+    /// Route SLEEP_CHANGE to INT2 pad
+    pub int2_sleep_chg: bool,
+    /// Route BOOT_STATUS to INT2 pad
+    pub int2_boot: bool,
+    /// Route temperature data-ready to INT2 pad
+    pub int2_drdy_t: bool,
+    /// Route FIFO overrun to INT2 pad
+    pub int2_ovr: bool,
+    /// Route FIFO full recognition to INT2 pad
+    pub int2_diff5: bool,
+    /// Route FIFO threshold to INT2 pad
+    pub int2_fth: bool,
+    /// Route data-ready to INT2 pad
+    pub int2_drdy: bool,
+}
+
+impl From<u8> for Int2PadConfig {
+    fn from(value: u8) -> Self {
+        Self {
+            int2_sleep_state: value & INT2_SLEEP_STATE != 0,
+            int2_sleep_chg: value & INT2_SLEEP_CHG != 0,
+            int2_boot: value & INT2_BOOT != 0,
+            int2_drdy_t: value & INT2_DRDY_T != 0,
+            int2_ovr: value & INT2_OVR != 0,
+            int2_diff5: value & INT2_DIFF5 != 0,
+            int2_fth: value & INT2_FTH != 0,
+            int2_drdy: value & INT2_DRDY != 0,
+        }
+    }
+}
+
+impl From<Int2PadConfig> for u8 {
+    fn from(value: Int2PadConfig) -> Self {
+        let mut result = 0;
+        if value.int2_sleep_state {
+            result |= INT2_SLEEP_STATE;
+        }
+        if value.int2_sleep_chg {
+            result |= INT2_SLEEP_CHG;
+        }
+        if value.int2_boot {
+            result |= INT2_BOOT;
+        }
+        if value.int2_drdy_t {
+            result |= INT2_DRDY_T;
+        }
+        if value.int2_ovr {
+            result |= INT2_OVR;
+        }
+        if value.int2_diff5 {
+            result |= INT2_DIFF5;
+        }
+        if value.int2_fth {
+            result |= INT2_FTH;
+        }
+        if value.int2_drdy {
+            result |= INT2_DRDY;
+        }
+        result
+    }
 }

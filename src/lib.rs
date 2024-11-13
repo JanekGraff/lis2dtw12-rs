@@ -162,6 +162,18 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(())
     }
 
+    /// Set configuration for INT1 pad
+    pub async fn configure_int1_pad(&mut self, config: Int1PadConfig) -> Result<(), I::Error> {
+        self.write_reg(Register::CTRL4_INT1_PAD_CTRL, config.into())
+            .await
+    }
+
+    /// Set configuration for INT2 pad
+    pub async fn configure_int2_pad(&mut self, config: Int2PadConfig) -> Result<(), I::Error> {
+        self.write_reg(Register::CTRL5_INT2_PAD_CTRL, config.into())
+            .await
+    }
+
     /// Enable/Disable Filtered data type selection
     ///
     /// disabled: low-pass filter path selected

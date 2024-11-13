@@ -12,8 +12,8 @@ pub enum Register {
     CTRL1 = 0x20,
     CTRL2 = 0x21,
     CTRL3 = 0x22,
-    CTRL_INT1_PAD_CTRL = 0x23,
-    CTRL_INT2_PAD_CTRL = 0x24,
+    CTRL4_INT1_PAD_CTRL = 0x23,
+    CTRL5_INT2_PAD_CTRL = 0x24,
     CTRL6 = 0x25,
     STATUS = 0x27,
     OUT_X_L = 0x28,
@@ -61,6 +61,35 @@ pub const LP_MODE_SHIFT: u8 = 0;
 pub const SOFT_RESET: u8 = 0b0100_0000;
 pub const CS_PU_DISC: u8 = 0b0001_0000;
 pub const BDU: u8 = 0b0000_1000;
+
+// ------- CTRL3 ------- //
+pub const ST_MASK: u8 = 0b1100_0000;
+pub const ST_SHIFT: u8 = 6;
+pub const PP_OD: u8 = 0b0010_0000;
+pub const LIR: u8 = 0b0001_0000;
+pub const H_LACTIVE: u8 = 0b0000_1000;
+pub const SLP_MODE_SEL: u8 = 0b0000_0010;
+pub const SIM: u8 = 0b0000_0001;
+
+// ------- CTRL4_INT1_PAD_CTRL ------- //
+pub const INT1_6D: u8 = 0b1000_0000;
+pub const INT1_SINGLE_TAP: u8 = 0b0100_0000;
+pub const INT1_WU: u8 = 0b0010_0000;
+pub const INT1_FF: u8 = 0b0001_0000;
+pub const INT1_TAP: u8 = 0b0000_1000;
+pub const INT1_DIFF5: u8 = 0b0000_0100;
+pub const INT1_FTH: u8 = 0b0000_0010;
+pub const INT1_DRDY: u8 = 0b0000_0001;
+
+// ------- CTRL5_INT2_PAD_CTRL ------- //
+pub const INT2_SLEEP_STATE: u8 = 0b1000_0000;
+pub const INT2_SLEEP_CHG: u8 = 0b0100_0000;
+pub const INT2_BOOT: u8 = 0b0010_0000;
+pub const INT2_DRDY_T: u8 = 0b0001_0000;
+pub const INT2_OVR: u8 = 0b0000_1000;
+pub const INT2_DIFF5: u8 = 0b0000_0100;
+pub const INT2_FTH: u8 = 0b0000_0010;
+pub const INT2_DRDY: u8 = 0b0000_0001;
 
 // ------- CTRL6 ------- //
 pub const BW_FILT_MASK: u8 = 0b1100_0000;
