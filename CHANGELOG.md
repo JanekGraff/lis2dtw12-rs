@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Also build example in CI
 
+- Add feature for choosing defmt/log
+
 ### Fixed
 
 ## [v0.1.3]

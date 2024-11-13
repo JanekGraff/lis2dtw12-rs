@@ -1,5 +1,6 @@
 /// Operating Mode
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Mode {
     /// Low power mode (12/14-bit resolution, depending on the set LowPowerMode)
     #[default]
@@ -14,6 +15,7 @@ pub enum Mode {
 ///
 /// Rates are shown as: <High-performance rate> / <Low-power rate>
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum OutputDataRate {
     /// Power-down mode
     PowerDown = 0b0000,
@@ -40,6 +42,7 @@ pub enum OutputDataRate {
 
 /// Low Power Mode
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum LowPowerMode {
     /// Low-power mode 1 (12-bit resolution)
     #[default]
@@ -54,6 +57,7 @@ pub enum LowPowerMode {
 
 /// Digital filtering cutoff selection / Bandwidth selection
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum BandwidthSelection {
     /// ODR/2 (up to ODR = 800 Hz, 400 Hz when ODR = 1600 Hz)
     #[default]
@@ -68,6 +72,7 @@ pub enum BandwidthSelection {
 
 /// Full-scale selection
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FullScale {
     /// ±2 g
     #[default]
@@ -107,6 +112,7 @@ impl FullScale {
 
 /// Fifo Mode
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FifoMode {
     /// Bypass mode (FIFO turned off)
     #[default]
@@ -123,6 +129,7 @@ pub enum FifoMode {
 
 /// Thresholds for 4D/6D function @ FS = ±2 g
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Threshold6D {
     /// 6 (80°)
     #[default]
@@ -139,6 +146,7 @@ pub enum Threshold6D {
 ///
 /// MAX_PRIO, MID_PRIO, MIN_PRIO
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum TapPriority {
     /// X, Y, Z
     #[default]
@@ -161,6 +169,7 @@ pub enum TapPriority {
 
 /// Free-fall Threshold @ FS = ±2 g
 #[derive(Debug, Copy, Clone, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FreeFallThreshold {
     /// 5
     #[default]

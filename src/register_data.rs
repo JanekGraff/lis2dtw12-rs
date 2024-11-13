@@ -2,6 +2,7 @@ use crate::registers::*;
 
 /// Struct representation of the Status register
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Status {
     /// FIFO threshold status
     ///
@@ -70,6 +71,7 @@ impl From<u8> for Status {
 
 /// Struct representation of the Status DUP (Event status) register
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct EventStatus {
     /// FIFO threshold status
     ///
@@ -137,6 +139,8 @@ impl From<u8> for EventStatus {
 }
 
 /// Acceleration data
+#[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct AccelerationData {
     /// X-axis acceleration
     pub x: f32,
@@ -147,6 +151,8 @@ pub struct AccelerationData {
 }
 
 /// RAW acceleration data
+#[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct RawAccelerationData {
     /// X-axis acceleration
     pub x: i16,
@@ -158,6 +164,7 @@ pub struct RawAccelerationData {
 
 /// FIFO Samples Status
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct FifoSamplesStatus {
     /// FIFO threshold status
     ///
@@ -187,6 +194,7 @@ impl From<u8> for FifoSamplesStatus {
 
 /// Wake-up source
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct WakeUpSource {
     /// Free-fall event detection status
     ///
@@ -241,6 +249,7 @@ impl From<u8> for WakeUpSource {
 
 /// Sign of the tap event
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sign {
     /// Positive sign
     Positive,
@@ -250,6 +259,7 @@ pub enum Sign {
 
 /// Tap source
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TapSource {
     /// Tap event status
     ///
@@ -310,6 +320,8 @@ impl From<u8> for TapSource {
 }
 
 /// 6D source
+#[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SixDSource {
     /// Source of change in position (portrait/landscape/face-up/face-down)
     ///
@@ -372,6 +384,8 @@ impl From<u8> for SixDSource {
 /// Struct representation of the All Interrupt Sources register
 ///
 /// This register is a combination of all interrupt sources
+#[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct AllInterruptSources {
     /// Sleep change interrupt
     ///

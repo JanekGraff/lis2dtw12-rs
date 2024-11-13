@@ -9,6 +9,8 @@
 #![forbid(unsafe_code)]
 #![cfg_attr(not(test), no_std)]
 
+mod fmt;
+
 mod i2c;
 mod register_data;
 mod register_settings;

@@ -4,6 +4,7 @@
 #[allow(non_camel_case_types)]
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Register {
     OUT_T_L = 0x0D,
     OUT_T_H = 0x0E,
