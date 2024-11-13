@@ -114,6 +114,9 @@ impl<I: Interface> Lis2dtw12<I> {
         self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
         self.mode = Mode::default();
         self.low_power_mode = LowPowerMode::default();
+        // TODO: Make this smarter instead of just blocking
+        while self.read_reg(Register::CTRL2).await? & SOFT_RESET != 0 {}
+
         Ok(())
     }
 
