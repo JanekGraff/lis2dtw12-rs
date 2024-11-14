@@ -404,6 +404,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Fifo threshold is a 5-bit value (0-31).
     ///
     /// If the given threshold value is greater than 31, it will be set to 31
+    ///
     pub async fn set_fifo_threshold(&mut self, threshold: u8) -> Result<(), I::Error> {
         let t = threshold.clamp(0, 31);
         self.modify_reg(Register::FIFO_CTRL, |v| v & !FTH_MASK | t << FTH_SHIFT)
@@ -419,6 +420,10 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Enable 4D decection portrait/landscape position
     ///
     /// Disabled by default
+    ///
+    /// # NOTE
+    ///
+    /// Only works when also enabling interrupts [`Self::enable_interrupts`]
     pub async fn enable_4d_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
             self.reg_set_bits(Register::TAP_THS_X, EN_4D).await
@@ -448,6 +453,10 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Enable X/Y/Z direction tap recognition
+    ///
+    /// # NOTE
+    ///
+    /// Only works when also enabling interrupts [`Self::enable_interrupts`]
     pub async fn enable_xyz_tap_detection(
         &mut self,
         x_enable: bool,
@@ -570,6 +579,10 @@ impl<I: Interface> Lis2dtw12<I> {
     /// disabled: Only single tap detection enabled
     ///
     /// Disabled by default
+    ///
+    /// # NOTE
+    ///
+    /// Only works when also enabling interrupts [`Self::enable_interrupts`]
     pub async fn enable_double_tap_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
             self.reg_set_bits(Register::WAKE_UP_THS, SINGLE_DOUBLE_TAP)
@@ -639,6 +652,10 @@ impl<I: Interface> Lis2dtw12<I> {
     /// disabled: Stationary detection disabled
     ///
     /// Disabled by default
+    ///
+    /// # NOTE
+    ///
+    /// Only works when also enabling interrupts [`Self::enable_interrupts`]
     pub async fn enable_stationary_detection(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
             self.reg_set_bits(Register::WAKE_UP_DUR, STATIONARY).await
