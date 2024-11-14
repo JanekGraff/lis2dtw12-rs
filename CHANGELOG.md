@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Reset settings interface
+  - Add option to reset and block until the reset is complete
+  - **OR**
+  - Reset and poll function for the reset to complete (non-blocking)
+
 ### Added
 
 - Configuration options for interrupt sources
@@ -16,8 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Function for reading all SRC registers
 
 ### Fixed
-
-- Wait for reset to complete
 
 ## [v0.1.4]
 

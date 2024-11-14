@@ -110,7 +110,14 @@ impl<I: Interface> Lis2dtw12<I> {
     }
 
     /// Reset all settings (CTRL registers to default)
-    pub async fn reset_settings(&mut self) -> Result<(), I::Error> {
+    ///
+    /// # NOTE
+    ///
+    /// This will block until the reset is complete
+    ///
+    /// Consider using [`Self::reset_settings`] and polling the reset status using [`Self::get_reset_complete`]
+    ///
+    pub async fn reset_settings_blocking(&mut self) -> Result<(), I::Error> {
         self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
         self.mode = Mode::default();
         self.low_power_mode = LowPowerMode::default();
@@ -118,6 +125,27 @@ impl<I: Interface> Lis2dtw12<I> {
         while self.read_reg(Register::CTRL2).await? & SOFT_RESET != 0 {}
 
         Ok(())
+    }
+
+    /// Reset all settings (CTRL registers to default)
+    ///
+    /// # NOTE
+    ///
+    /// This will not wait for the reset to complete
+    /// you should poll the reset status using [`Self::get_reset_complete`]
+    /// to check if the reset is complete
+    ///
+    /// The accelerometer will not work while resetting!
+    pub async fn reset_settings(&mut self) -> Result<(), I::Error> {
+        self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
+        self.mode = Mode::default();
+        self.low_power_mode = LowPowerMode::default();
+        Ok(())
+    }
+
+    /// Get the reset status from the CTRL2 register
+    pub async fn get_reset_complete(&mut self) -> Result<bool, I::Error> {
+        Ok(self.read_reg(Register::CTRL2).await? & SOFT_RESET == 0)
     }
 
     /// (Dis-)connect CS pull-up (only relevant when using SPI interface)
