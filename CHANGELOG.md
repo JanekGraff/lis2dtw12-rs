@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Function for reading all SRC registers
 
+- Dump registers function
+
 ### Fixed
 
 ## [v0.1.4]
