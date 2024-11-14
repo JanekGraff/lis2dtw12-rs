@@ -243,6 +243,20 @@ impl<I: Interface> Lis2dtw12<I> {
         Ok(EventStatus::from(status))
     }
 
+    /// Get all source registers
+    ///
+    /// Reads the following registers succesively:
+    /// - STATUS_DUP
+    /// - WAKE_UP_SRC
+    /// - TAP_SRC
+    /// - SIXD_SRC
+    /// - ALL_INT_SRC
+    pub async fn get_all_sources(&mut self) -> Result<AllSources, I::Error> {
+        let mut buffer = [0; 5];
+        self.read_regs(Register::STATUS_DUP, &mut buffer).await?;
+        Ok(AllSources::from(buffer))
+    }
+
     /// Get the X-axis RAW acceleration data
     ///
     /// # NOTE

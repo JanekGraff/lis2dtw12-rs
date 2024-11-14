@@ -437,3 +437,31 @@ impl From<u8> for AllInterruptSources {
         }
     }
 }
+
+/// Struct representation of the 5 SRC registers combined
+///
+/// can be read with [crate::Lis2dtw12::get_all_sources]
+pub struct AllSources {
+    /// Event status register (see [`EventStatus`](crate::register_data::EventStatus))
+    pub event_status: EventStatus,
+    /// Wake up source register (see [`WakeUpSource`](crate::register_data::WakeUpSource))
+    pub wake_up_source: WakeUpSource,
+    /// Tap source register (see [`TapSource`](crate::register_data::TapSource))
+    pub tap_source: TapSource,
+    /// 6D source register (see [`SixDSource`](crate::register_data::SixDSource))
+    pub six_d_source: SixDSource,
+    /// All interrupt sources register (see [`AllInterruptSources`](crate::register_data::AllInterruptSources))
+    pub all_interrupt_sources: AllInterruptSources,
+}
+
+impl From<[u8; 5]> for AllSources {
+    fn from(value: [u8; 5]) -> Self {
+        Self {
+            event_status: EventStatus::from(value[0]),
+            wake_up_source: WakeUpSource::from(value[1]),
+            tap_source: TapSource::from(value[2]),
+            six_d_source: SixDSource::from(value[3]),
+            all_interrupt_sources: AllInterruptSources::from(value[4]),
+        }
+    }
+}

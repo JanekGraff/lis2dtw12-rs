@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Configuration options for interrupt sources
+
+- Function for reading all SRC registers
+
 ### Fixed
 
 - Wait for reset to complete
