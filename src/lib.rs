@@ -895,101 +895,115 @@ impl<I: Interface> Lis2dtw12<I> {
 
     /// Dump all registers
     pub async fn dump_registers(&mut self) -> Result<(), I::Error> {
-        info!(
-            "CTRL1 ({:#02X}): {:#08b}",
-            Register::CTRL1 as u8,
-            self.read_reg(Register::CTRL1).await?
-        );
-        info!(
-            "CTRL2 ({:#02X}): {:#08b}",
-            Register::CTRL2 as u8,
-            self.read_reg(Register::CTRL2).await?
-        );
-        info!(
-            "CTRL3 ({:#02X}): {:#08b}",
-            Register::CTRL3 as u8,
-            self.read_reg(Register::CTRL3).await?
-        );
+        let val = self.read_reg(Register::CTRL1).await?;
+        info!("CTRL1 ({:#02X}): {:#08b}", Register::CTRL1 as u8, val);
+
+        let val = self.read_reg(Register::CTRL2).await?;
+        info!("CTRL2 ({:#02X}): {:#08b}", Register::CTRL2 as u8, val);
+
+        let val = self.read_reg(Register::CTRL3).await?;
+        info!("CTRL3 ({:#02X}): {:#08b}", Register::CTRL3 as u8, val);
+
+        let val = self.read_reg(Register::CTRL4_INT1_PAD_CTRL).await?;
         info!(
             "CTRL4_INT1_PAD_CTRL ({:#02X}): {:#08b}",
             Register::CTRL4_INT1_PAD_CTRL as u8,
-            self.read_reg(Register::CTRL4_INT1_PAD_CTRL).await?
+            val
         );
+
+        let val = self.read_reg(Register::CTRL5_INT2_PAD_CTRL).await?;
         info!(
             "CTRL5_INT2_PAD_CTRL ({:#02X}): {:#08b}",
             Register::CTRL5_INT2_PAD_CTRL as u8,
-            self.read_reg(Register::CTRL5_INT2_PAD_CTRL).await?
+            val
         );
-        info!(
-            "CTRL6 ({:#02X}): {:#08b}",
-            Register::CTRL6 as u8,
-            self.read_reg(Register::CTRL6).await?
-        );
+
+        let val = self.read_reg(Register::CTRL6).await?;
+        info!("CTRL6 ({:#02X}): {:#08b}", Register::CTRL6 as u8, val);
+
+        let val = self.read_reg(Register::FIFO_CTRL).await?;
         info!(
             "FIFO_CTRL ({:#02X}): {:#08b}",
             Register::FIFO_CTRL as u8,
-            self.read_reg(Register::FIFO_CTRL).await?
+            val
         );
+
+        let val = self.read_reg(Register::FIFO_SAMPLES).await?;
         info!(
             "FIFO_SAMPLES ({:#02X}): {:#08b}",
             Register::FIFO_SAMPLES as u8,
-            self.read_reg(Register::FIFO_SAMPLES).await?
+            val
         );
+
+        let val = self.read_reg(Register::TAP_THS_X).await?;
         info!(
             "TAP_THS_X ({:#02X}): {:#08b}",
             Register::TAP_THS_X as u8,
-            self.read_reg(Register::TAP_THS_X).await?
+            val
         );
+
+        let val = self.read_reg(Register::TAP_THS_Y).await?;
         info!(
             "TAP_THS_Y ({:#02X}): {:#08b}",
             Register::TAP_THS_Y as u8,
-            self.read_reg(Register::TAP_THS_Y).await?
+            val
         );
+
+        let val = self.read_reg(Register::TAP_THS_Z).await?;
         info!(
             "TAP_THS_Z ({:#02X}): {:#08b}",
             Register::TAP_THS_Z as u8,
-            self.read_reg(Register::TAP_THS_Z).await?
+            val
         );
-        info!(
-            "INT_DUR ({:#02X}): {:#08b}",
-            Register::INT_DUR as u8,
-            self.read_reg(Register::INT_DUR).await?
-        );
+
+        let val = self.read_reg(Register::INT_DUR).await?;
+        info!("INT_DUR ({:#02X}): {:#08b}", Register::INT_DUR as u8, val);
+
+        let val = self.read_reg(Register::WAKE_UP_THS).await?;
         info!(
             "WAKE_UP_THS ({:#02X}): {:#08b}",
             Register::WAKE_UP_THS as u8,
-            self.read_reg(Register::WAKE_UP_THS).await?
+            val
         );
+
+        let val = self.read_reg(Register::WAKE_UP_DUR).await?;
         info!(
             "WAKE_UP_DUR ({:#02X}): {:#08b}",
             Register::WAKE_UP_DUR as u8,
-            self.read_reg(Register::WAKE_UP_DUR).await?
+            val
         );
+
+        let val = self.read_reg(Register::FREE_FALL).await?;
         info!(
             "FREE_FALL ({:#02X}): {:#08b}",
             Register::FREE_FALL as u8,
-            self.read_reg(Register::FREE_FALL).await?
+            val
         );
+
+        let val = self.read_reg(Register::X_OFS_USR).await?;
         info!(
             "X_OFS_USR ({:#02X}): {:#08b}",
             Register::X_OFS_USR as u8,
-            self.read_reg(Register::X_OFS_USR).await?
+            val
         );
+
+        let val = self.read_reg(Register::Y_OFS_USR).await?;
         info!(
             "Y_OFS_USR ({:#02X}): {:#08b}",
             Register::Y_OFS_USR as u8,
-            self.read_reg(Register::Y_OFS_USR).await?
+            val
         );
+
+        let val = self.read_reg(Register::Z_OFS_USR).await?;
         info!(
             "Z_OFS_USR ({:#02X}): {:#08b}",
             Register::Z_OFS_USR as u8,
-            self.read_reg(Register::Z_OFS_USR).await?
+            val
         );
-        info!(
-            "CTRL7 ({:#02X}): {:#08b}",
-            Register::CTRL7 as u8,
-            self.read_reg(Register::CTRL7).await?
-        );
+
+        let val = self.read_reg(Register::CTRL7).await?;
+        info!("CTRL7 ({:#02X}): {:#08b}", Register::CTRL7 as u8, val);
+
         Ok(())
     }
 
