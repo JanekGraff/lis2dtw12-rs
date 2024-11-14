@@ -441,6 +441,8 @@ impl From<u8> for AllInterruptSources {
 /// Struct representation of the 5 SRC registers combined
 ///
 /// can be read with [crate::Lis2dtw12::get_all_sources]
+#[derive(Debug, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct AllSources {
     /// Event status register (see [`EventStatus`](crate::register_data::EventStatus))
     pub event_status: EventStatus,
