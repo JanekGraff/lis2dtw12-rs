@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+### Added
+
+### Fixed
+
+## [v0.1.5]
+
+### Changed
+
 - Reset settings interface
   - Add option to reset and block until the reset is complete
   - **OR**
@@ -73,8 +81,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix formatting of docstrings
 
-[Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.5...HEAD
 [v0.1.1]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.1...v0.1.2
 [v0.1.3]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.2...v0.1.3
 [v0.1.4]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.3...v0.1.4
+[v0.1.5]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.4...v0.1.5
