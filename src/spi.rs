@@ -28,6 +28,16 @@ impl<SPI: SpiDevice> SPIInterface<SPI> {
     pub fn new(spi: SPI) -> Self {
         Self { spi }
     }
+
+    /// Destroy the SPI interface and return the SPI device
+    ///
+    /// Consumes self and returns the SPI device
+    ///
+    /// # Returns
+    /// * `SPI` - SPI device
+    pub fn destroy(self) -> SPI {
+        self.spi
+    }
 }
 
 /// SPI interface for the driver using an `embedded_hal::spi::SpiBus` instead of `embedded_hal::spi::SpiDevice`

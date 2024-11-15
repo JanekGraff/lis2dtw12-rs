@@ -50,6 +50,16 @@ impl<I2C: I2c> I2CInterface<I2C> {
             addr: addr.addr(),
         }
     }
+
+    /// Destroy the I2C interface and return the I2C device
+    ///
+    /// Consumes self and returns the I2C device
+    ///
+    /// # Returns
+    /// * `I2C` - I2C device
+    pub fn destroy(self) -> I2C {
+        self.i2c
+    }
 }
 
 #[cfg(feature = "async")]

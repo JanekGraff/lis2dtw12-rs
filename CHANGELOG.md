@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- `destroy()` methods to I2C and SPI interface structs
+
 ### Fixed
 
 ## [v0.1.5]
