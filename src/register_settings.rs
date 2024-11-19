@@ -5,16 +5,29 @@ use crate::{
 };
 
 /// Operating Mode
+/// See the [datasheet](https://www.st.com/resource/en/datasheet/lis2dtw12.pdf) section 3.2.1 (Operating modes) for more info
 #[derive(Debug, Copy, Clone, Default)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Mode {
-    /// Low power mode (12/14-bit resolution, depending on the set LowPowerMode)
+    /// High performance mode (14-bit resolution)
+    HighPerformance = 0b0100,
+    /// Continuous conversion mode (14-bit resolution)
+    ContinuousLowPower4 = 0b0011,
+    /// Continuous conversion mode (14-bit resolution)
+    ContinuousLowPower3 = 0b0010,
+    /// Continuous conversion mode (14-bit resolution)
+    ContinuousLowPower2 = 0b0001,
     #[default]
-    LowPower = 0b00,
-    /// High-performance mode (14 Bit resolution)
-    HighPerformance = 0b01,
-    /// Single data conversion on-demand mode (12/14-bit resolution, depending on the set LowPowerMode)
-    SingleDataConversion = 0b10,
+    /// Continuous conversion mode (12-bit resolution)
+    ContinuousLowPower1 = 0b0000,
+    /// Singe data conversion on demand mode (14-bit resolution)
+    SingleConversionLowPower4 = 0b1011,
+    /// Singe data conversion on demand mode (14-bit resolution)
+    SingleConversionLowPower3 = 0b1010,
+    /// Singe data conversion on demand mode (14-bit resolution)
+    SingleConversionLowPower2 = 0b1001,
+    /// Singe data conversion on demand mode (12-bit resolution)
+    SingleConversionLowPower1 = 0b1000,
 }
 
 /// Output Data Rate
@@ -44,21 +57,6 @@ pub enum OutputDataRate {
     Hz800 = 0b1000,
     /// 1600 Hz / 200 Hz
     Hz1600 = 0b1001,
-}
-
-/// Low Power Mode
-#[derive(Debug, Copy, Clone, Default)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum LowPowerMode {
-    /// Low-power mode 1 (12-bit resolution)
-    #[default]
-    Mode1 = 0b00,
-    /// Low-power mode 2 (14-bit resolution)
-    Mode2 = 0b01,
-    /// Low-power mode 3 (14-bit resolution)
-    Mode3 = 0b10,
-    /// Low-power mode 4 (14-bit resolution)
-    Mode4 = 0b11,
 }
 
 /// Digital filtering cutoff selection / Bandwidth selection
@@ -92,12 +90,7 @@ pub enum FullScale {
 }
 
 impl FullScale {
-    pub(crate) fn convert_raw_i16_to_mg(
-        self,
-        raw: i16,
-        set_mode: Mode,
-        set_lp_mode: LowPowerMode,
-    ) -> f32 {
+    pub(crate) fn convert_raw_i16_to_mg(self, raw: i16, set_mode: Mode) -> f32 {
         // mg/digit
         let factor = match self {
             FullScale::G2 => 0.244,

@@ -36,7 +36,6 @@ pub use register_settings::*;
 pub struct Lis2dtw12<I> {
     interface: I,
     mode: Mode,
-    low_power_mode: LowPowerMode,
     fullscale: FullScale,
 }
 
@@ -48,7 +47,6 @@ impl<I: Interface> Lis2dtw12<I> {
         Self {
             interface,
             mode: Mode::default(),
-            low_power_mode: LowPowerMode::default(),
             fullscale: FullScale::default(),
         }
     }
@@ -89,23 +87,10 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Set the Mode
     pub async fn set_mode(&mut self, mode: Mode) -> Result<(), I::Error> {
         self.modify_reg(Register::CTRL1, |v| {
-            v & !MODE_MASK | (mode as u8) << MODE_SHIFT
+            v & !(MODE_MASK | LP_MODE_MASK) | (mode as u8)
         })
         .await?;
         self.mode = mode;
-        Ok(())
-    }
-
-    /// Set the Low Power Mode
-    pub async fn set_low_power_mode(
-        &mut self,
-        low_power_mode: LowPowerMode,
-    ) -> Result<(), I::Error> {
-        self.modify_reg(Register::CTRL1, |v| {
-            v & !LP_MODE_MASK | (low_power_mode as u8) << LP_MODE_SHIFT
-        })
-        .await?;
-        self.low_power_mode = low_power_mode;
         Ok(())
     }
 
@@ -120,7 +105,6 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn reset_settings_blocking(&mut self) -> Result<(), I::Error> {
         self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
         self.mode = Mode::default();
-        self.low_power_mode = LowPowerMode::default();
         // TODO: Make this smarter instead of just blocking
         while self.read_reg(Register::CTRL2).await? & SOFT_RESET != 0 {}
 
@@ -139,7 +123,6 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn reset_settings(&mut self) -> Result<(), I::Error> {
         self.reg_set_bits(Register::CTRL2, SOFT_RESET).await?;
         self.mode = Mode::default();
-        self.low_power_mode = LowPowerMode::default();
         Ok(())
     }
 
@@ -325,9 +308,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// - X-Acceleration in **mg**
     pub async fn get_x_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_x_accel_raw().await?;
-        Ok(self
-            .fullscale
-            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
+        Ok(self.fullscale.convert_raw_i16_to_mg(raw, self.mode))
     }
 
     /// Get the Y-axis acceleration data
@@ -337,9 +318,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// - Y-Acceleration in **mg**
     pub async fn get_y_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_y_accel_raw().await?;
-        Ok(self
-            .fullscale
-            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
+        Ok(self.fullscale.convert_raw_i16_to_mg(raw, self.mode))
     }
 
     /// Get the Z-axis acceleration data
@@ -349,9 +328,7 @@ impl<I: Interface> Lis2dtw12<I> {
     /// - Z-Acceleration in **mg**
     pub async fn get_z_accel(&mut self) -> Result<f32, I::Error> {
         let raw = self.get_z_accel_raw().await?;
-        Ok(self
-            .fullscale
-            .convert_raw_i16_to_mg(raw, self.mode, self.low_power_mode))
+        Ok(self.fullscale.convert_raw_i16_to_mg(raw, self.mode))
     }
 
     /// Get the RAW acceleration data
@@ -377,15 +354,9 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_accel_data(&mut self) -> Result<AccelerationData, I::Error> {
         let raw = self.get_accel_data_raw().await?;
         Ok(AccelerationData {
-            x: self
-                .fullscale
-                .convert_raw_i16_to_mg(raw.x, self.mode, self.low_power_mode),
-            y: self
-                .fullscale
-                .convert_raw_i16_to_mg(raw.y, self.mode, self.low_power_mode),
-            z: self
-                .fullscale
-                .convert_raw_i16_to_mg(raw.z, self.mode, self.low_power_mode),
+            x: self.fullscale.convert_raw_i16_to_mg(raw.x, self.mode),
+            y: self.fullscale.convert_raw_i16_to_mg(raw.y, self.mode),
+            z: self.fullscale.convert_raw_i16_to_mg(raw.z, self.mode),
         })
     }
 
