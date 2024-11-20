@@ -41,4 +41,4 @@ jobs:
         run: cargo clippy --no-default-features --features "async"
         
       - name: Build example
-        run: cargo build --example stm32l431-embassy-async --no-default-features --features "async"
+        run: cd examples/stm32l4-embassy-async && cargo build
