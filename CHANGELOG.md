@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Mode and LowPowerMode have been combined into one setting.
 
+- Make seperate crate for example
+
 ### Added
 
 - `destroy()` methods to I2C and SPI interface structs

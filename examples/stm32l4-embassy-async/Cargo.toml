@@ -1,0 +1,47 @@
+[package]
+name = "lis2dtw12-async-example"
+version = "0.1.0"
+repository = "https://github.com/JanekGraff/lis2dtw12-rs"
+license = "Apache-2.0 OR MIT"
+edition = "2021"
+
+[dependencies]
+cortex-m = { version = "0.7.6", features = ["critical-section-single-core"] }
+cortex-m-rt = "0.7.5"
+embedded-hal = "1.0.0"
+embedded-hal-async = "1.0.0"
+embedded-hal-bus = { version = "0.2.0", features = ["async"] }
+nb = "1.1.0"
+
+# Embassy asnyc
+embassy-executor = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "arch-cortex-m",
+    "executor-thread",
+    "integrated-timers",
+] }
+embassy-futures = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-embedded-hal = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-sync = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47" }
+embassy-time = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "tick-hz-32_768",
+] }
+embassy-stm32 = { git = "https://github.com/embassy-rs/embassy.git", rev = "a7d1abf6b79d25632a1966ed9f27fa21ab3e0e47", features = [
+    "unstable-pac",
+    "memory-x",
+    "exti",
+    "chrono",
+    "stm32l431vc",
+    "time-driver-tim15",
+] }
+
+panic-probe = { version = "0.3.2", features = ["print-defmt"] }
+defmt = "0.3.8"
+defmt-rtt = "0.4.1"
+
+lis2dtw12 = { path = "../../", default-features = false, features = [
+    "async",
+    "defmt",
+] }
+
+[profile.release]
+lto = true
