@@ -40,11 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Dump registers function
 
-### Fixed
-
 ## [v0.1.4]
-
-### Changed
 
 ### Added
 
@@ -52,11 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add feature for choosing defmt/log
 
-### Fixed
-
 ## [v0.1.3]
-
-### Changed
 
 ### Added
 
@@ -70,17 +62,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.1.2]
 
-### Changed
-
-### Added
-
 ### Fixed
 
 - Properly re-export SlaveAddr enum in interface.rs
 
 ## [v0.1.1]
-
-### Changed
 
 ### Added
 
@@ -91,9 +77,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix formatting of docstrings
 
-[Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/JanekGraff/li2dtw12/compare/v0.2.0...HEAD
 [v0.1.1]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.1...v0.1.2
 [v0.1.3]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.2...v0.1.3
 [v0.1.4]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.3...v0.1.4
 [v0.1.5]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.4...v0.1.5
+[v0.2.0]: https://github.com/JanekGraff/li2dtw12/compare/v0.1.5...v0.2.0
