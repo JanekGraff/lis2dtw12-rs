@@ -9,11 +9,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Mode and LowPowerMode have been combined into one setting.
+
 ### Added
 
 - `destroy()` methods to I2C and SPI interface structs
 
 ### Fixed
+
+- Raw acceleration data is now aligned depending on the set mode
+
+- Conversion of raw results to mg
 
 ## [v0.1.5]
 
