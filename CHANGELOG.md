@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.0]
+
 ### Changed
 
 - Mode and LowPowerMode have been combined into one setting.
