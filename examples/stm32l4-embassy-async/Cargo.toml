@@ -43,5 +43,16 @@ lis2dtw12 = { path = "../../", default-features = false, features = [
     "defmt",
 ] }
 
+[profile.dev]
+codegen-units = 1
+debug = true
+lto = false
+opt-level = 1
+incremental = true
+
 [profile.release]
-lto = true
+codegen-units = 1
+debug = true
+lto = false
+opt-level = "s"
+incremental = true
