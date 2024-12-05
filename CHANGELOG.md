@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Replace bit shifting operations with arithmetic operations to preserve sign
-
 - Fix Low noise setting the wrong bit
 
 ## [v0.2.0]

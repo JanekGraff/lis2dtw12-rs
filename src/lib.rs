@@ -276,7 +276,7 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_x_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_X_L, &mut buffer).await?;
-        let raw = (buffer[1] as i16) * 256 + buffer[0] as i16;
+        let raw = (buffer[1] as i16) << 8 | buffer[0] as i16;
 
         match self.mode {
             Mode::ContinuousLowPower1 | Mode::SingleConversionLowPower1 => Ok(raw / 16),
@@ -292,7 +292,7 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_y_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_Y_L, &mut buffer).await?;
-        let raw = (buffer[1] as i16) * 256 + buffer[0] as i16;
+        let raw = (buffer[1] as i16) << 8 | buffer[0] as i16;
 
         match self.mode {
             Mode::ContinuousLowPower1 | Mode::SingleConversionLowPower1 => Ok(raw / 16),
@@ -308,7 +308,7 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_z_accel_raw(&mut self) -> Result<i16, I::Error> {
         let mut buffer = [0; 2];
         self.read_regs(Register::OUT_Z_L, &mut buffer).await?;
-        let raw = (buffer[1] as i16) * 256 + buffer[0] as i16;
+        let raw = (buffer[1] as i16) << 8 | buffer[0] as i16;
 
         match self.mode {
             Mode::ContinuousLowPower1 | Mode::SingleConversionLowPower1 => Ok(raw / 16),
@@ -354,9 +354,9 @@ impl<I: Interface> Lis2dtw12<I> {
     pub async fn get_accel_data_raw(&mut self) -> Result<RawAccelerationData, I::Error> {
         let mut buffer = [0; 6];
         self.read_regs(Register::OUT_X_L, &mut buffer).await?;
-        let raw_x = (buffer[1] as i16) * 256 + buffer[0] as i16;
-        let raw_y = (buffer[3] as i16) * 256 + buffer[2] as i16;
-        let raw_z = (buffer[5] as i16) * 256 + buffer[4] as i16;
+        let raw_x = (buffer[1] as i16) << 8 | buffer[0] as i16;
+        let raw_y = (buffer[3] as i16) << 8 | buffer[2] as i16;
+        let raw_z = (buffer[5] as i16) << 8 | buffer[4] as i16;
 
         match self.mode {
             Mode::ContinuousLowPower1 | Mode::SingleConversionLowPower1 => {
