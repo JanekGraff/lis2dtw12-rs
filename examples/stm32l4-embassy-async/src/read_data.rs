@@ -56,7 +56,6 @@ async fn main(_spawner: Spawner) {
         "Found device ID: {}",
         accelerometer.get_device_id().await.unwrap()
     );
-    accelerometer.dump_registers().await.unwrap();
 
     loop {
         if let Ok(data) = accelerometer.get_accel_data_raw().await {

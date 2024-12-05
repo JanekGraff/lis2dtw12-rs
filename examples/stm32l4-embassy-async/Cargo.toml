@@ -43,6 +43,12 @@ lis2dtw12 = { path = "../../", default-features = false, features = [
     "defmt",
 ] }
 
+[[bin]]
+name = "read_data"
+test = false
+bench = false
+path = "src/read_data.rs"
+
 [profile.dev]
 codegen-units = 1
 debug = true
