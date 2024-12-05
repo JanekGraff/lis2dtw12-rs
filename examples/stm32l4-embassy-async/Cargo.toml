@@ -49,6 +49,12 @@ test = false
 bench = false
 path = "src/read_data.rs"
 
+[[bin]]
+name = "tap_detection"
+test = false
+bench = false
+path = "src/tap_detection.rs"
+
 [profile.dev]
 codegen-units = 1
 debug = true
