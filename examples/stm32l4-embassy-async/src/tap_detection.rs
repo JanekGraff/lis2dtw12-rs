@@ -9,7 +9,7 @@ use embassy_stm32::bind_interrupts;
 use embassy_stm32::i2c;
 use embassy_stm32::peripherals::*;
 use embassy_stm32::time;
-use embassy_time::{Duration, Timer};
+use embassy_time::Timer;
 use lis2dtw12::interface::{I2CInterface, SlaveAddr};
 use lis2dtw12::FullScale;
 use lis2dtw12::Lis2dtw12Async;
@@ -64,8 +64,10 @@ async fn main(_spawner: Spawner) {
     accel.set_tap_quiet_time(1).await.unwrap();
     accel.set_tap_shock_time(2).await.unwrap();
     accel.enable_double_tap_detection(false).await.unwrap();
-    let mut int1_config = lis2dtw12::Int1PadConfig::default();
-    int1_config.int1_single_tap = true;
+    let int1_config = lis2dtw12::Int1PadConfig {
+        int1_single_tap: true,
+        ..Default::default()
+    };
     accel.configure_int1_pad(int1_config).await.unwrap();
     accel.enable_interrupts(true).await.unwrap();
 
