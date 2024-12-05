@@ -58,7 +58,7 @@ async fn main(_spawner: Spawner) {
     );
 
     loop {
-        if let Ok(data) = accelerometer.get_accel_data_raw().await {
+        if let Ok(data) = accelerometer.get_accel_data().await {
             info!("X: {}mg, Y: {}mg, Z: {}mg", data.x, data.y, data.z);
         }
         Timer::after(Duration::from_millis(500)).await;
