@@ -11,8 +11,10 @@ use embassy_stm32::peripherals::*;
 use embassy_stm32::time;
 use embassy_time::{Duration, Timer};
 use lis2dtw12::interface::{I2CInterface, SlaveAddr};
+use lis2dtw12::FullScale;
 use lis2dtw12::Lis2dtw12Async;
 use lis2dtw12::Mode;
+use lis2dtw12::OutputDataRate;
 
 bind_interrupts!(struct Irqs {
     I2C1_EV => i2c::EventInterruptHandler<I2C1>;
@@ -36,14 +38,28 @@ async fn main(_spawner: Spawner) {
     );
     let interface = I2CInterface::new(i2c, SlaveAddr::Alternative(true));
     let mut accelerometer = Lis2dtw12Async::new(interface);
-    accelerometer.set_mode(Mode::HighPerformance).await.unwrap();
+
+    // Reset accelerometer
+    accelerometer.reset_settings_blocking().await.unwrap();
+
+    accelerometer.set_full_scale(FullScale::G2).await.unwrap();
+    accelerometer
+        .set_mode(Mode::ContinuousLowPower1)
+        .await
+        .unwrap();
+    accelerometer.enable_low_noise(true).await.unwrap();
+    accelerometer
+        .set_output_data_rate(OutputDataRate::Hz400)
+        .await
+        .unwrap();
     defmt::info!(
         "Found device ID: {}",
         accelerometer.get_device_id().await.unwrap()
     );
+    accelerometer.dump_registers().await.unwrap();
 
     loop {
-        if let Ok(data) = accelerometer.get_accel_data().await {
+        if let Ok(data) = accelerometer.get_accel_data_raw().await {
             info!("X: {}mg, Y: {}mg, Z: {}mg", data.x, data.y, data.z);
         }
         Timer::after(Duration::from_millis(500)).await;
