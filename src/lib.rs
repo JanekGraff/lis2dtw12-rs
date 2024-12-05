@@ -204,9 +204,9 @@ impl<I: Interface> Lis2dtw12<I> {
     /// Disabled by default
     pub async fn enable_low_noise(&mut self, enable: bool) -> Result<(), I::Error> {
         if enable {
-            self.reg_set_bits(Register::CTRL6, FDS).await
+            self.reg_set_bits(Register::CTRL6, LOW_NOISE).await
         } else {
-            self.reg_reset_bits(Register::CTRL6, FDS).await
+            self.reg_reset_bits(Register::CTRL6, LOW_NOISE).await
         }
     }
 
