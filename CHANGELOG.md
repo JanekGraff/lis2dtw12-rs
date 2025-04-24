@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.0]
+
+### Changed
+
+- Bump defmt dependency from v0.3 to v1.0.
+
 ## [v0.2.1]
 
 ### Changed
@@ -93,7 +99,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix formatting of docstrings
 
-[Unreleased]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.3.0...HEAD
 [v0.1.1]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.1.1...v0.1.2
 [v0.1.3]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.1.2...v0.1.3
@@ -101,3 +107,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [v0.1.5]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.1.4...v0.1.5
 [v0.2.0]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.1.5...v0.2.0
 [v0.2.1]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.2.0...v0.2.1
+[v0.3.0]: https://github.com/JanekGraff/li2dtw12-rs/compare/v0.2.1...v0.3.0
